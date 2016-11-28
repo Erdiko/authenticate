@@ -1,5 +1,18 @@
-# Authentication
-User authentication
+# Authenticate
+
+**User Authentication**
+
+
+Compatibility
+-------------
+
+
+Installation
+------------
+
+
+How to Use
+----------
 
 
 Special Thanks
