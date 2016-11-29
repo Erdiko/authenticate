@@ -27,12 +27,12 @@ class ConfigLoaderTest extends \tests\ErdikoTestCase
 	 */
     public function testloadFromJsonFail()
     {
-	    $result = $this->loadFromJson('application/auth');
+	    $result = $this->loadFromJson();
     }
 
     public function testloadFromJson()
     {
-        $result = $this->loadFromJson('application/auth');
+        $result = $this->loadFromJson();
 		$this->assertInternalType('array', $result);
 	    $this->assertNotEmpty($result);
 	    $this->assertTrue(array_key_exists('authentication', $result));
