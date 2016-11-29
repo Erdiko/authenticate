@@ -21,7 +21,6 @@ class SessionStorageTest extends \tests\ErdikoTestCase
 		$_SESSION = array();
 		ini_set("session.use_cookies",0);
 		ini_set("session.use_only_cookies",0);
-		@session_start();
 	}
 
 	public function setUp()
@@ -39,7 +38,7 @@ class SessionStorageTest extends \tests\ErdikoTestCase
 	public function testSessionPersistAnnonymous()
 	{
 		$this->session->persist(MyErdikoUser::getAnonymous());
-		$current_user = $_SESSION["current_user"];
+		$current_user = MyErdikoUser::unmarshall($_SESSION["current_user"]);
 
 		$this->assertNotEmpty($current_user);
 		$this->assertTrue($current_user->isAnonymous());
@@ -51,7 +50,7 @@ class SessionStorageTest extends \tests\ErdikoTestCase
 		$this->user->setRoles(array("client"));
 		$this->session->persist($this->user);
 
-		$current_user = $_SESSION["current_user"];
+		$current_user = MyErdikoUser::unmarshall($_SESSION["current_user"]);
 
 		$this->assertNotEmpty($current_user);
 		$this->assertTrue($current_user->hasRole('client'));
@@ -63,7 +62,7 @@ class SessionStorageTest extends \tests\ErdikoTestCase
 		$this->user->setRoles(array("admin"));
 		$this->session->persist($this->user);
 
-		$current = $this->session->attemptLoad();
+		$current = $this->session->attemptLoad($this->user);
 		$this->assertNotEmpty($current);
 		$this->assertTrue($current->isAdmin());
 	}

@@ -25,12 +25,52 @@ class MyErdikoUser implements iErdikoUser
 	{
 	}
 
-	public function marshall() {
+	/*public function marshall() {
 		// TODO: Implement marshall() method.
+	}*/
+
+	public function marshall($type="json")
+	{
+		$tmp = $this;
+		// unset sensitive fields
+		unset($tmp->password);
+		unset($tmp->created_at);
+		unset($tmp->updated_at);
+		$out = array();
+		foreach ($tmp as $field=>$value){
+			$out[$field] = $value;
+		}
+		$response = null;
+		switch ($type) {
+			case "object":
+				$response = (object)$out;
+				break;
+			case "array":
+				$response = (array)$out;
+				break;
+			case "json":
+			default:
+				$response = json_encode($out);
+		}
+		return $response;
 	}
 
 	public static function unmarshall($encoded) {
 		// TODO: Implement unmarshall() method.
+		$decode = json_decode( $encoded, true );
+		if(empty($decode)){
+			$entity = self::getAnonymous();
+		} else {
+			$entity = new MyErdikoUser();
+			foreach ($decode as $key=>$value) {
+				if($key!=='profile') {
+					$key    = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $key ) ) );
+					$method = "set{$key}";
+					$entity->$method( $value );
+				}
+			}
+		}
+		return $entity;
 	}
 
 	public static function getAnonymous()

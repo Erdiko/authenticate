@@ -18,7 +18,6 @@ class BasicAuthTest extends \tests\ErdikoTestCase
 		$_SESSION = array();
 		ini_set("session.use_cookies",0);
 		ini_set("session.use_only_cookies",0);
-		@session_start();
 	}
 
 	public function testCreate()
@@ -45,6 +44,7 @@ class BasicAuthTest extends \tests\ErdikoTestCase
 	{
 		$basic = new BasicAuth(MyErdikoUser::getAnonymous());
 		$basic->persistUser(MyErdikoUser::getAnonymous());
+
 		$this->assertNotEmpty($_SESSION['current_user']);
 	}
 
@@ -56,7 +56,8 @@ class BasicAuthTest extends \tests\ErdikoTestCase
 		$basic = new BasicAuth(MyErdikoUser::getAnonymous());
 		$basic->persistUser(MyErdikoUser::getAnonymous());
 		$current = $basic->current_user();
-		$this->assertEquals($current, $_SESSION['current_user']);
+
+		$this->assertEquals($current, MyErdikoUser::unmarshall($_SESSION['current_user']));
 	}
 
 	/**
@@ -66,6 +67,7 @@ class BasicAuthTest extends \tests\ErdikoTestCase
 	{
 		$basic = new BasicAuth(MyErdikoUser::getAnonymous());
 		$basic->login(array('username'=>'foo@mail.com'),'mock');
+
 		$current = $basic->current_user();
 
 		$this->assertNotEmpty($current);
