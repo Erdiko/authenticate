@@ -18,9 +18,6 @@ trait ConfigLoader
   // Optional, it might include guards and rules.
   public function loadFromJson($context=null)
   {
-    if($context==null)
-      $context = getenv('ERDIKO_CONTEXT');
-
-    return \erdiko\core\Helper::getConfig("{$context}/authorize");
+    return \erdiko\core\Helper::getConfig("authorize", $context);
   }
 }
