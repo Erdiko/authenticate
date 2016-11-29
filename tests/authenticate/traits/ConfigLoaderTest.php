@@ -27,11 +27,15 @@ class ConfigLoaderTest extends \tests\ErdikoTestCase
 	 */
     public function testloadFromJsonFail()
     {
+    	putenv("ERDIKO_CONTEXT=notexists");
+
 	    $result = $this->loadFromJson();
     }
 
     public function testloadFromJson()
     {
+    	putenv("ERDIKO_CONTEXT=tests"); // Load the test config (instead of default)
+
         $result = $this->loadFromJson();
 		$this->assertInternalType('array', $result);
 	    $this->assertNotEmpty($result);
