@@ -21,6 +21,6 @@ trait ConfigLoader
     if($context==null)
       $context = getenv('ERDIKO_CONTEXT');
 
-    return \erdiko\core\Helper::getConfig("{$context}/authorize");
+	  return \erdiko\core\Helper::getConfig("authorize",$context);
   }
 }

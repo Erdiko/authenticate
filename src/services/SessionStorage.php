@@ -44,6 +44,10 @@ Class SessionStorage implements Storage {
 
 	private function startSession()
 	{
+		if(!file_exists(ERDIKO_VAR . "/session")) {
+			mkdir(ERDIKO_VAR . "/session");
+		}
+		ini_set('session.save_path',ERDIKO_VAR . "/session");
 		if (version_compare(phpversion(), '5.4.0', '<')) {
 			if(session_id() == '') {
 				session_start();
