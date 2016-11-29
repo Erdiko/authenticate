@@ -8,11 +8,12 @@
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-
 namespace erdiko\authenticate\traits;
 
 
-trait Builder {
+trait Builder 
+{
+
 	public function buildStorages($storage = array())
 	{
 		$_container = new \Pimple\Container();
