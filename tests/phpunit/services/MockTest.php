@@ -3,7 +3,7 @@
  *
  * @todo add tests for the different template types
  */
-namespace erdiko\authenticate\tests\authenticate\services;
+namespace tests\phpunit\services;
 
 use erdiko\authenticate\Services\Mock;
 

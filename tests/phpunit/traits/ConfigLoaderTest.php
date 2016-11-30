@@ -3,7 +3,7 @@
  *
  * @todo add tests for the different template types
  */
-namespace erdiko\tests\authenticate\Traits;
+namespace tests\phpunit\traits;
 
 use erdiko\authenticate\Traits\ConfigLoader;
 

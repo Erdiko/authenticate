@@ -3,7 +3,7 @@
  *
  * @todo add tests for the different template types
  */
-namespace erdiko\tests\authenticate;
+namespace tests\phpunit;
 
 use erdiko\authenticate\BasicAuth;
 use erdiko\authenticate\Services\MyErdikoUser;
