@@ -15,20 +15,5 @@
       "classname": "SessionStorage",
       "enabled": true
     }]
-  },
-  "guards":[
-    "dashboard",
-    "index"
-  ],
-  "policies": {
-    "anonymous" : {
-      "index":{
-        "read":"allow",
-        "login": "allow"
-      },
-      "dashboard":{
-        "read":"allow"
-      }
-    }
   }
 }
