@@ -25,22 +25,7 @@ How to Use
 ----------
 Before you start using this package, it needs some initial setup/config.
 
-1. Add Login controller's route.
- 
- It provides a self-contained login/logout actions and views, to have it accessible, edit your 
- `routes.json` like this:
-
-```
-{
-    "routes": {
-        "/": "\app\controllers\Front",
-        ...
-        "/users/:action": "\erdiko\users\controllers\Login"
-    }
-}
-```
-
-2. Add `authenticate.json` config.
+##### Add `authenticate.json` config.
 
 In this file will be defined two major components, the first one related with storage and the other related with 
 authentication.
@@ -92,7 +77,7 @@ the rule is: replace back slash with underscore.
 * _**classname**_: is the exact name of the class and it is case-sensitive.
 * _**enabled**_: True, if it's available to use, false, if you want to disable temporarily.
 
-### Custom Authenticate class example
+##### Custom Authenticate class example
 ```
    class AuthTest implements iAuth
    {
