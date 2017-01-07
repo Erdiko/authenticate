@@ -32,6 +32,10 @@ class JWTAuth implements iAuth
 
         $user = $user->authenticate($username, $password);
 
+        if(empty($user) || false == $user) {
+            throw new \Exception("User was not found");
+        }
+
         // make sure we have a secret key to create the JWT 
         if(!array_key_exists("secret_key", $credentials) || empty($credentials["secret_key"])) {
             throw new \Exception("Secret Key is required to create a JWT");
@@ -59,11 +63,14 @@ class JWTAuth implements iAuth
             "role"  => array(
                 "id"    => $role->getId(),
                 "name"  => $role->getName()
-            )
+            ),
+            "created" => time() // store time JWT was created so we can expire them if needed
         );
 
         $result = (object)array(
-            "user"  => $user,
+            "user"  => $user,   // return the user so we can store in the session
+
+            // create the jwt token
             "token" => JWT::encode($token, $credentials["secret_key"], $hashAlg)
         );
 
@@ -87,23 +94,20 @@ class JWTAuth implements iAuth
         }
 
         // get hash alg from params, default to HS256
-        $hashAlg = "HS256";
+        $hashAlgs = array("HS256");
         if(array_key_exists("hash_alg", $credentials) && !empty($credentials["hash_alg"])) {
-            $hashAlg = $credentials["hash_alg"];
+            $hashAlgs[] = $credentials["hash_alg"];
+            $hashAlgs = array_unique($hashAlgs);
         }
 
-        // get the application secret key
-        $config     = \Erdiko::getConfig();
-        $secretKey  = $config["site"]["secret_key"];
+        $token = JWT::decode($credentials["jwt"], $credentials["secret_key"], $hashAlgs);
 
-        $token = JWT::decode($jwt, $secretKey, array('HS256'));
+        // User ID is a good checksum to make sure we have a valid JWT
         if(empty($token) || empty($token->id)) {
             throw new \Exception("JWT Token invalid");
         }
 
-        //TODO return the decoded user?
-        
-        return true;
+        return $token;
     }
     
 }
