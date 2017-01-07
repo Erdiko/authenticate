@@ -132,18 +132,13 @@ class JWTAuthenticator implements BaseAuthenticator
      * decodeJWT
      *
      */
-    public function decodeJWT($credentials)
+    public function decodeJWT($credentials, $type = 'mock')
     {
 
 		$result = false;
 		try {
 			$auth = $this->container["AUTHENTICATIONS"][$type];
             $result = $auth->decodeJWT($credentials);
-
-            //TODO magic goes here?
-
-            $result = true;
-
 		} catch (\Exception $e) {
 			\error_log($e->getMessage());
 		}
