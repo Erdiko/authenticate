@@ -20,10 +20,15 @@ use \Firebase\JWT\JWT;
 class JWTAuth implements iAuth
 {
 
-	public function login( $credentials ) {
+    /**
+     * login
+     *
+     */
+    public function login( $credentials ) 
+    {
 		$user = new User();
 		$username = (array_key_exists('username', $credentials)) ? $credentials['username'] : '';
-        $password = (array_key_exists('password',$credentials)) ? $credentials['password'] : '';
+        $password = (array_key_exists('password', $credentials)) ? $credentials['password'] : '';
 
         $user = $user->authenticate($username, $password);
 
@@ -63,5 +68,42 @@ class JWTAuth implements iAuth
         );
 
 		return $result;
-	}
+    }
+
+    /**
+     * decodeJWT
+     *
+     */
+    public function decodeJWT($credentials)
+    {
+
+        if(!array_key_exists("jwt", $credentials) || empty($credentials["jwt"])) {
+            throw new \Exception("JWT is required");
+        }
+
+        // make sure we have a secret key to decode the JWT 
+        if(!array_key_exists("secret_key", $credentials) || empty($credentials["secret_key"])) {
+            throw new \Exception("Secret Key is required to decode this JWT");
+        }
+
+        // get hash alg from params, default to HS256
+        $hashAlg = "HS256";
+        if(array_key_exists("hash_alg", $credentials) && !empty($credentials["hash_alg"])) {
+            $hashAlg = $credentials["hash_alg"];
+        }
+
+        // get the application secret key
+        $config     = \Erdiko::getConfig();
+        $secretKey  = $config["site"]["secret_key"];
+
+        $token = JWT::decode($jwt, $secretKey, array('HS256'));
+        if(empty($token) || empty($token->id)) {
+            throw new \Exception("JWT Token invalid");
+        }
+
+        //TODO return the decoded user?
+        
+        return true;
+    }
+    
 }

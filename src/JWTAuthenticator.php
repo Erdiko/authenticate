@@ -28,7 +28,10 @@ class JWTAuthenticator implements BaseAuthenticator
 
 	protected $erdikoUser;
 
-
+    /**
+     * __construct
+     *
+     */
 	public function __construct(iErdikoUser $user)
 	{
 		$this->erdikoUser = $user;
@@ -43,8 +46,16 @@ class JWTAuthenticator implements BaseAuthenticator
 		$this->buildAuthenticator($authentication);
 	}
 
+    /**
+     * persistUser
+     *
+     */
 	public function persistUser(iErdikoUser $user) { }
 
+    /**
+     * current_user
+     *
+     */
 	public function current_user()
 	{
 		try {
@@ -58,6 +69,10 @@ class JWTAuthenticator implements BaseAuthenticator
 		return $user;
 	}
 
+    /**
+     * logout
+     *
+     */
 	public function logout()
 	{
 		try{
@@ -68,6 +83,10 @@ class JWTAuthenticator implements BaseAuthenticator
 		}
 	}
 
+    /**
+     * persistUserAndToken
+     *
+     */
 	public function persistUserAndToken($userData)
     {
 		try {
@@ -78,6 +97,10 @@ class JWTAuthenticator implements BaseAuthenticator
 		}
     }
 
+    /**
+     * login
+     *
+     */
 	public function login($credentials = array(), $type = 'mock')
     {
         $storage = $this->container["STORAGES"][$this->selectedStorage];
@@ -103,5 +126,29 @@ class JWTAuthenticator implements BaseAuthenticator
 		}
 		return $result;
 	}
+
+
+    /**
+     * decodeJWT
+     *
+     */
+    public function decodeJWT($credentials)
+    {
+
+		$result = false;
+		try {
+			$auth = $this->container["AUTHENTICATIONS"][$type];
+            $result = $auth->decodeJWT($credentials);
+
+            //TODO magic goes here?
+
+            $result = true;
+
+		} catch (\Exception $e) {
+			\error_log($e->getMessage());
+		}
+		return $result;
+
+    }
 
 }
