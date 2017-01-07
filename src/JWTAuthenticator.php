@@ -1,15 +1,14 @@
 <?php
-
-
 /**
- * JWTAuth
+ * JWTAuthenticator
+ *
+ * Authenticator class that creates and validates JWT via the JWTAuth Service
  *
  * @category    Erdiko
  * @package     Authenticate
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Andy Armstrong, andy@arroyolabs.com
  */
-
 
 namespace erdiko\authenticate;
 
@@ -48,12 +47,13 @@ class JWTAuthenticator implements BaseAuthenticator
 
     /**
      * persistUser
-     *
      */
 	public function persistUser(iErdikoUser $user) { }
 
     /**
      * current_user
+     *
+     * Returns the user (currently logged in) from the storage container
      *
      */
 	public function current_user()
@@ -72,6 +72,8 @@ class JWTAuthenticator implements BaseAuthenticator
     /**
      * logout
      *
+     * Kill the session
+     *
      */
 	public function logout()
 	{
@@ -84,21 +86,9 @@ class JWTAuthenticator implements BaseAuthenticator
 	}
 
     /**
-     * persistUserAndToken
-     *
-     */
-	public function persistUserAndToken($userData)
-    {
-		try {
-			$store = $this->container["STORAGES"][$this->selectedStorage];
-			$store->persist($userData);
-		} catch (\Exception $e) {
-			throw new \Exception($e->getMessage());
-		}
-    }
-
-    /**
      * login
+     *
+     * Attempt to log the user in via service model
      *
      */
 	public function login($credentials = array(), $type = 'mock')
@@ -127,14 +117,14 @@ class JWTAuthenticator implements BaseAuthenticator
 		return $result;
 	}
 
-
     /**
      * decodeJWT
+     *
+     * Decode the JWT via the service model
      *
      */
     public function decodeJWT($credentials, $type = 'mock')
     {
-
 		$result = false;
 		try {
 			$auth = $this->container["AUTHENTICATIONS"][$type];
@@ -143,7 +133,6 @@ class JWTAuthenticator implements BaseAuthenticator
 			\error_log($e->getMessage());
 		}
 		return $result;
-
     }
 
 }
