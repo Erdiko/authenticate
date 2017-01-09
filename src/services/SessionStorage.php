@@ -8,7 +8,7 @@
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-namespace erdiko\authenticate\Services;
+namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\iErdikoUser;
 
