@@ -2,25 +2,25 @@
 /**
  * SessionStorage
  *
- * @category    Erdiko
- * @package     Authenticate/Services
+ * @package     erdiko/authenticate/services
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-namespace erdiko\authenticate\Services;
+namespace erdiko\authenticate\services;
 
-use erdiko\authenticate\iErdikoUser;
+use erdiko\authenticate\UserInterface;
+use erdiko\authenticate\StorageInterface;
 
-Class SessionStorage implements Storage {
+Class SessionStorage implements StorageInterface {
 
-	public function persist(iErdikoUser $user)
+	public function persist(UserInterface $user)
 	{
 		$this->startSession();
 		$_SESSION["current_user"] = $user->marshall();
 	}
 
-	public function attemptLoad(iErdikoUser $userModel)
+	public function attemptLoad(UserInterface $userModel)
 	{
 		$user = null;
 		$this->startSession();
@@ -48,13 +48,9 @@ Class SessionStorage implements Storage {
 			mkdir(ERDIKO_VAR . "/session");
 		}
 		ini_set('session.save_path',ERDIKO_VAR . "/session");
-		if (version_compare(phpversion(), '5.4.0', '<')) {
-			if(session_id() == '') {
-				session_start();
-			}
-		}
-		else
-		{
+		if(session_id() == '') {
+			session_start();
+		} else {
 			if (session_status() == PHP_SESSION_NONE) {
 				session_start();
 			}

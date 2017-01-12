@@ -2,8 +2,7 @@
   /**
    * ConfigLoader
    *
-   * @category    Erdiko
-   * @package     Authenticate/Traits
+   * @package     erdiko/authenticate/traits
    * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
    * @author      Leo Daidone, leo@arroyolabs.com
    * @author      John Arroyo, john@arroyolabs.com
@@ -11,7 +10,7 @@
 
 namespace erdiko\authenticate\traits;
 
-trait ConfigLoader
+trait ConfigLoaderTrait
 {
 
   // attempt to load config form authorize.json, specially settings for DI.

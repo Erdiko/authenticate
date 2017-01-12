@@ -4,22 +4,22 @@
  *
  * Authenticator class that creates and validates JWT via the JWTAuth Service
  *
- * @category    Erdiko
- * @package     Authenticate
+ * @note this should use the JWT class for encode/decode
+ *
+ * @package     erdiko/authenticate/services
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Andy Armstrong, andy@arroyolabs.com
  */
 
 namespace erdiko\authenticate;
 
-use erdiko\authenticate\traits\ConfigLoader;
-use erdiko\authenticate\traits\Builder;
+use erdiko\authenticate\services\AuthenticatorInterface;
+use erdiko\authenticate\UserInterface;
 
-class JWTAuthenticator implements BaseAuthenticator
+class JWTAuthenticator implements AuthenticatorInterface
 {
-
-	use ConfigLoader;
-	use Builder;
+	use erdiko\authenticate\traits\ConfigLoaderTrait;
+	use erdiko\authenticate\traits\BuilderTrait;
 
 	private $config;
 	private $container;
@@ -31,7 +31,7 @@ class JWTAuthenticator implements BaseAuthenticator
      * __construct
      *
      */
-	public function __construct(iErdikoUser $user)
+	public function __construct(UserInterface $user)
 	{
 		$this->erdikoUser = $user;
 		$this->container = new \Pimple\Container();
@@ -48,7 +48,7 @@ class JWTAuthenticator implements BaseAuthenticator
     /**
      * persistUser
      */
-	public function persistUser(iErdikoUser $user) { }
+	public function persistUser(UserInterface $user) { }
 
     /**
      * current_user

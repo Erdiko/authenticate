@@ -1,9 +1,8 @@
 <?php
 /**
- * Builder
+ * BuilderTrait
  *
- * @category    Erdiko
- * @package     Authenticate/Traits
+ * @package     erdiko/authenticate/traits
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
@@ -11,7 +10,7 @@
 namespace erdiko\authenticate\traits;
 
 
-trait Builder 
+trait BuilderTrait
 {
 
 	public function buildStorages($storage = array())

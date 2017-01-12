@@ -2,17 +2,16 @@
 /**
  * MyErdikoUser
  *
- * @category    Erdiko
- * @package     Authenticate/Services
+ * @package     erdiko/authenticate/services
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
 namespace erdiko\authenticate\Services;
 
-use erdiko\authenticate\iErdikoUser;
+use erdiko\authenticate\UserInterface;
 
-class MyErdikoUser implements iErdikoUser
+class MyErdikoUser implements UserInterface
 {
 	private $user_id;
 	private $roles = array('anonymous');

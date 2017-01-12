@@ -1,25 +1,17 @@
 <?php
-
-
 /**
- * BasicAuth
+ * Basic
  *
- * @category    Erdiko
- * @package     Authenticate
+ * @package     erdiko/authenticate
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
-
-
 namespace erdiko\authenticate;
 
-use erdiko\authenticate\traits\ConfigLoader;
-use erdiko\authenticate\traits\Builder;
-
-class BasicAuth implements BaseAuthenticator
+class Basic implements AuthenticatorInterface
 {
-	use ConfigLoader;
-	use Builder;
+	use \erdiko\authenticate\traits\ConfigLoaderTrait;
+	use \erdiko\authenticate\traits\BuilderTrait;
 
 	private $config;
 	private $container;
@@ -28,7 +20,7 @@ class BasicAuth implements BaseAuthenticator
 	protected $erdikoUser;
 
 
-	public function __construct(iErdikoUser $user)
+	public function __construct(UserInterface $user)
 	{
 		$this->erdikoUser = $user;
 		$this->container = new \Pimple\Container();
@@ -42,7 +34,7 @@ class BasicAuth implements BaseAuthenticator
 		$this->buildAuthenticator($authentication);
 	}
 
-	public function persistUser(iErdikoUser $user)
+	public function persistUser(UserInterface $user)
 	{
 		try {
 			$store = $this->container["STORAGES"][$this->selectedStorage];
@@ -70,7 +62,7 @@ class BasicAuth implements BaseAuthenticator
 		$storage = $this->container["STORAGES"][$this->selectedStorage];
 		// checks if it's already logged in
 		$user = $storage->attemptLoad($this->erdikoUser);
-		if($user instanceof iErdikoUser){
+		if($user instanceof UserInterface){
 			$this->logout();
 		}
 		$response = false;

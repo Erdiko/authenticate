@@ -2,9 +2,9 @@
 /**
  * JWTAuth
  *
+ * @note this should not require the Users model (circular reference)
  *
- * @category    app
- * @package     User
+ * @package     erdiko/authenticate/services
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Andy Armstrong, andy@arroyolabs.com
  */
@@ -12,12 +12,12 @@
 
 namespace erdiko\authenticate\services;
 
-use erdiko\authenticate\services\iAuth;
-use erdiko\users\models\User;
+use erdiko\authenticate\services\AuthenticationInterface;
+use erdiko\users\models\User; // @note this is a circular reference
 
 use \Firebase\JWT\JWT;
 
-class JWTAuth implements iAuth
+class JWTAuth implements AuthenticationInterface
 {
 
     /**
@@ -48,6 +48,7 @@ class JWTAuth implements iAuth
         }
 
         // get the logged in user role
+        // @note this relies on the users package so would be a circular reference -john
         $roleModel = new \erdiko\users\models\Role();
         $role = $roleModel->findById($user->getRole());
 
