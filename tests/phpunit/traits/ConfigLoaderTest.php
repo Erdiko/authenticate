@@ -5,7 +5,7 @@
  */
 namespace tests\phpunit\traits;
 
-use erdiko\authenticate\Traits\ConfigLoader;
+use erdiko\authenticate\traits\ConfigLoaderTrait;
 
 require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
 
@@ -20,7 +20,7 @@ require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
 
 class ConfigLoaderTest extends \tests\ErdikoTestCase
 {
-    use ConfigLoader;
+    use ConfigLoaderTrait;
 
 	/**
 	 * @expectedException

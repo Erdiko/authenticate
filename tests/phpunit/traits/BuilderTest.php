@@ -5,13 +5,13 @@
  */
 namespace tests\phpunit\traits;
 
-use erdiko\authenticate\Traits\Builder;
+use erdiko\authenticate\traits\BuilderTrait;
 
 require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
 
 class BuilderTest extends \tests\ErdikoTestCase
 {
-	use Builder;
+	use BuilderTrait;
 
 	public $container = null;
 

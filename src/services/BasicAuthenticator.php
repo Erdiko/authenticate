@@ -1,14 +1,17 @@
 <?php
 /**
- * Basic
+ * BasicAuthenticator
  *
- * @package     erdiko/authenticate
+ * @package     erdiko/authenticate/services
  * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
-namespace erdiko\authenticate;
+namespace erdiko\authenticate\services;
 
-class Basic implements AuthenticatorInterface
+use erdiko\authenticate\AuthenticatorInterface;
+use erdiko\authenticate\UserStorageInterface;
+
+class BasicAuthenticator implements AuthenticatorInterface
 {
 	use \erdiko\authenticate\traits\ConfigLoaderTrait;
 	use \erdiko\authenticate\traits\BuilderTrait;
@@ -20,7 +23,7 @@ class Basic implements AuthenticatorInterface
 	protected $erdikoUser;
 
 
-	public function __construct(UserInterface $user)
+	public function __construct(UserStorageInterface $user)
 	{
 		$this->erdikoUser = $user;
 		$this->container = new \Pimple\Container();
@@ -34,7 +37,7 @@ class Basic implements AuthenticatorInterface
 		$this->buildAuthenticator($authentication);
 	}
 
-	public function persistUser(UserInterface $user)
+	public function persistUser(UserStorageInterface $user)
 	{
 		try {
 			$store = $this->container["STORAGES"][$this->selectedStorage];
@@ -44,7 +47,7 @@ class Basic implements AuthenticatorInterface
 		}
 	}
 
-	public function current_user()
+	public function currentUser()
 	{
 		try {
 			$store = $this->container["STORAGES"][$this->selectedStorage];
@@ -62,7 +65,7 @@ class Basic implements AuthenticatorInterface
 		$storage = $this->container["STORAGES"][$this->selectedStorage];
 		// checks if it's already logged in
 		$user = $storage->attemptLoad($this->erdikoUser);
-		if($user instanceof UserInterface){
+		if($user instanceof UserStorageInterface){
 			$this->logout();
 		}
 		$response = false;

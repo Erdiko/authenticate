@@ -4,17 +4,19 @@
  *
  * Authenticator class that creates and validates JWT via the JWTAuth Service
  *
+ * @note this class should extend Basic
+ *
  * @note this should use the JWT class for encode/decode
  *
  * @package     erdiko/authenticate/services
- * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
+ * @copyright   Copyright (c) 2017, Arroyo Labs, http://www.arroyolabs.com
  * @author      Andy Armstrong, andy@arroyolabs.com
  */
 
 namespace erdiko\authenticate;
 
 use erdiko\authenticate\services\AuthenticatorInterface;
-use erdiko\authenticate\UserInterface;
+use erdiko\authenticate\UserStorageInterface;
 
 class JWTAuthenticator implements AuthenticatorInterface
 {
@@ -31,7 +33,7 @@ class JWTAuthenticator implements AuthenticatorInterface
      * __construct
      *
      */
-	public function __construct(UserInterface $user)
+	public function __construct(UserStorageInterface $user)
 	{
 		$this->erdikoUser = $user;
 		$this->container = new \Pimple\Container();
@@ -48,7 +50,7 @@ class JWTAuthenticator implements AuthenticatorInterface
     /**
      * persistUser
      */
-	public function persistUser(UserInterface $user) { }
+	public function persistUser(UserStorageInterface $user) { }
 
     /**
      * current_user
@@ -56,7 +58,7 @@ class JWTAuthenticator implements AuthenticatorInterface
      * Returns the user (currently logged in) from the storage container
      *
      */
-	public function current_user()
+	public function currentUser()
 	{
 		try {
 			$store = $this->container["STORAGES"][$this->selectedStorage];

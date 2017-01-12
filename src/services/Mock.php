@@ -3,13 +3,13 @@
  * Mock
  *
  * @package     erdiko/authenticate/services
- * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
+ * @copyright   Copyright (c) 2017, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-namespace erdiko\authenticate\Services;
+namespace erdiko\authenticate\services;
 
-class Mock implements AuthenticationInterface
+class Mock implements erdiko\authenticate\AuthenticationInterface
 {
 	public function login($credentials)
 	{

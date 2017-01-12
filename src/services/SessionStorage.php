@@ -1,26 +1,27 @@
 <?php
 /**
  * SessionStorage
+ * @todo rename to SessionFileStorage or FileSessionStorage or storage/SessionFile
  *
  * @package     erdiko/authenticate/services
- * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
+ * @copyright   Copyright (c) 2017, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
 namespace erdiko\authenticate\services;
 
-use erdiko\authenticate\UserInterface;
+use erdiko\authenticate\UserStorageInterface;
 use erdiko\authenticate\StorageInterface;
 
 Class SessionStorage implements StorageInterface {
 
-	public function persist(UserInterface $user)
+	public function persist(UserStorageInterface $user)
 	{
 		$this->startSession();
 		$_SESSION["current_user"] = $user->marshall();
 	}
 
-	public function attemptLoad(UserInterface $userModel)
+	public function attemptLoad(UserStorageInterface $userModel)
 	{
 		$user = null;
 		$this->startSession();

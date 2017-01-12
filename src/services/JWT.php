@@ -5,7 +5,7 @@
  * @note this should not require the Users model (circular reference)
  *
  * @package     erdiko/authenticate/services
- * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
+ * @copyright   Copyright (c) 2017, Arroyo Labs, http://www.arroyolabs.com
  * @author      Andy Armstrong, andy@arroyolabs.com
  */
 

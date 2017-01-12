@@ -3,15 +3,15 @@
  * MyErdikoUser
  *
  * @package     erdiko/authenticate/services
- * @copyright   Copyright (c) 2016, Arroyo Labs, http://www.arroyolabs.com
+ * @copyright   Copyright (c) 2017, Arroyo Labs, http://www.arroyolabs.com
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-namespace erdiko\authenticate\Services;
+namespace erdiko\authenticate\services;
 
-use erdiko\authenticate\UserInterface;
+use erdiko\authenticate\UserStorageInterface;
 
-class MyErdikoUser implements UserInterface
+class MyErdikoUser implements UserStorageInterface
 {
 	private $user_id;
 	private $roles = array('anonymous');
