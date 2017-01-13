@@ -12,12 +12,12 @@
 
 namespace erdiko\authenticate\services;
 
-use erdiko\authenticate\services\AuthenticationInterface;
+use erdiko\authenticate\AuthenticationInterface;
 use erdiko\users\models\User; // @note this is a circular reference
 
 use \Firebase\JWT\JWT;
 
-class JWTAuth implements AuthenticationInterface
+class JWTAuthentication implements AuthenticationInterface
 {
 
     /**

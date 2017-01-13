@@ -13,15 +13,15 @@
  * @author      Andy Armstrong, andy@arroyolabs.com
  */
 
-namespace erdiko\authenticate;
+namespace erdiko\authenticate\services;
 
-use erdiko\authenticate\services\AuthenticatorInterface;
+use erdiko\authenticate\AuthenticatorInterface;
 use erdiko\authenticate\UserStorageInterface;
 
 class JWTAuthenticator implements AuthenticatorInterface
 {
-	use erdiko\authenticate\traits\ConfigLoaderTrait;
-	use erdiko\authenticate\traits\BuilderTrait;
+	use \erdiko\authenticate\traits\ConfigLoaderTrait;
+	use \erdiko\authenticate\traits\BuilderTrait;
 
 	private $config;
 	private $container;
@@ -107,7 +107,10 @@ class JWTAuthenticator implements AuthenticatorInterface
 		try {
 			$auth = $this->container["AUTHENTICATIONS"][$type];
             $result = $auth->login($credentials);
-            $user = $result->user;
+            if(isset($result->user))
+            	$user = $result->user;
+            else
+            	throw new \Exception("user failed to load");
 
 			if(!empty($user) && (false !== $user)) {
 				$this->persistUser( $user );
