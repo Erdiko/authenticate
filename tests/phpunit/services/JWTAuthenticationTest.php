@@ -75,10 +75,6 @@ class JWTAuthenticationTest extends \tests\ErdikoTestCase
 
         }
 
-        $this->mockRole->expects($this->any())
-                       ->method('findById')
-                       ->will($this->returnValue($this->mockRoleEntity));
-       
         // set up mock user entity
         $this->mockUserEntity = $this->getMockBuilder('\erdiko\users\entities\User')
                                      ->disableOriginalConstructor()
@@ -102,16 +98,19 @@ class JWTAuthenticationTest extends \tests\ErdikoTestCase
     }
 
     /**
-     *
+     * positive test of the login
      *
      */
     public function testLogin() 
     {
-
         $this->mockUser->expects($this->once())
                        ->method('authenticate')
                        ->will($this->returnValue($this->mockUser));
 
+        $this->mockRole->expects($this->any())
+                       ->method('findById')
+                       ->will($this->returnValue($this->mockRoleEntity));
+ 
         $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
 		$result = $auth->login($this->params);
 
@@ -120,7 +119,65 @@ class JWTAuthenticationTest extends \tests\ErdikoTestCase
     }
 
     /**
+     * make sure we throw an exception if we lack a secret key
      *
+     */
+    public function testLoginNoSecret() 
+    {
+        $this->mockUser->expects($this->once())
+                       ->method('authenticate')
+                       ->will($this->returnValue($this->mockUser));
+
+        $params = $this->params;
+        unset($params["secret_key"]);
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Secret Key is required to create a JWT");
+
+        $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
+		$result = $auth->login($params);
+    }
+
+    /**
+     * no user is found
+     *
+     */
+    public function testLoginNoUser() 
+    {
+        $this->mockUser->expects($this->once())
+                       ->method('authenticate')
+                       ->will($this->returnValue(false));
+
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("User was not found");
+
+        $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
+		$result = $auth->login($this->params);
+    }
+
+    /**
+     * no user role is found
+     *
+     */
+    public function testLoginNoUserRole() 
+    {
+
+        $this->mockUser->expects($this->once())
+                       ->method('authenticate')
+                       ->will($this->returnValue($this->mockUser));
+
+        $this->mockRole->expects($this->any())
+                       ->method('findById')
+                       ->will($this->returnValue(false));
+
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Role was not found for user");
+
+        $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
+		$result = $auth->login($this->params);
+    }
+
+    /**
+     * positive test of the verify method
      *
      */
     public function testVerify()
@@ -138,6 +195,50 @@ class JWTAuthenticationTest extends \tests\ErdikoTestCase
         $this->assertTrue(($this->mockRoleData["id"] === $result->role->id), "Role ID matches as expected");
         $this->assertTrue(($this->mockRoleData["name"] === $result->role->name), "Role name matches as expected");
 
+    }
+
+    /**
+     *
+     */
+    public function testVerifyNoJWT()
+    {
+        $params = $this->params;
+        unset($params["jwt"]);
+
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("JWT is required");
+
+        $auth = new JWTAuthentication($this->mockUser, $this->mockRole);
+        $result = $auth->verify($params);
+    }
+
+    /**
+     *
+     */
+    public function testVerifyNoSecretKey()
+    {
+        $params = $this->params;
+        unset($params["secret_key"]);
+
+        $this->expectException('Exception');
+        $this->expectExceptionMessage("Secret Key is required to decode this JWT");
+
+        $auth = new JWTAuthentication($this->mockUser, $this->mockRole);
+        $result = $auth->verify($params);
+    }
+
+    /**
+     *
+     */
+    public function testVerifyGarbageJWT()
+    {
+        $params = $this->params;
+        $params["jwt"] = '121222121';
+
+        $this->expectException('Exception');
+
+        $auth = new JWTAuthentication($this->mockUser, $this->mockRole);
+        $result = $auth->verify($params);
     }
 
 }
