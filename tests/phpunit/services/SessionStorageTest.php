@@ -5,8 +5,8 @@
  */
 namespace tests\phpunit\services;
 
-use erdiko\authenticate\Services\MyErdikoUser;
-use erdiko\authenticate\Services\SessionStorage;
+use erdiko\authenticate\services\MyErdikoUser;
+use erdiko\authenticate\services\SessionStorage;
 
 require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
 

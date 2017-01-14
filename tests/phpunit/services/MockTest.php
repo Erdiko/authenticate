@@ -5,7 +5,7 @@
  */
 namespace tests\phpunit\services;
 
-use erdiko\authenticate\Services\Mock;
+use erdiko\authenticate\services\Mock;
 
 require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
 

@@ -50,10 +50,10 @@ Class SessionStorage implements StorageInterface {
 		}
 		ini_set('session.save_path',ERDIKO_VAR . "/session");
 		if(session_id() == '') {
-			session_start();
+			@session_start();
 		} else {
 			if (session_status() == PHP_SESSION_NONE) {
-				session_start();
+				@session_start();
 			}
 		}
 	}
