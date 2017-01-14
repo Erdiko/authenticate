@@ -7,7 +7,7 @@ namespace tests\phpunit\services;
 
 use erdiko\authenticate\services\Mock;
 
-require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
 
 
 class MockTest extends \tests\ErdikoTestCase

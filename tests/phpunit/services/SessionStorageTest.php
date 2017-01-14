@@ -8,7 +8,7 @@ namespace tests\phpunit\services;
 use erdiko\authenticate\services\MyErdikoUser;
 use erdiko\authenticate\services\SessionStorage;
 
-require_once dirname(dirname(__DIR__)) . '/ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
 
 
 class SessionStorageTest extends \tests\ErdikoTestCase

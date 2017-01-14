@@ -8,7 +8,7 @@ namespace tests\phpunit;
 use erdiko\authenticate\services\BasicAuthenticator;
 use erdiko\authenticate\services\MyErdikoUser;
 
-require_once dirname(__DIR__) . '/ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
 
 
 class BasicAuthenticatorTest extends \tests\ErdikoTestCase
@@ -24,8 +24,8 @@ class BasicAuthenticatorTest extends \tests\ErdikoTestCase
     protected function setUp()
     {
         @session_start();
-        //error_reporting(E_ALL);
-        //ini_set('display_errors', 1);
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
     }
 
 	public function testCreate()
@@ -58,7 +58,7 @@ class BasicAuthenticatorTest extends \tests\ErdikoTestCase
 	/**
 	 * @depends testPersistUser
 	 */
-	public function testCurrent_user()
+	public function testCurrentUser()
 	{
 		$basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
 		$basic->persistUser(MyErdikoUser::getAnonymous());
@@ -72,7 +72,6 @@ class BasicAuthenticatorTest extends \tests\ErdikoTestCase
 	 */
 	public function testLogin()
 	{
-        $this->markTestSkipped('must be revisited.');
         $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
 		$basic->login(array('username'=>'foo@mail.com'), 'mock');
 
