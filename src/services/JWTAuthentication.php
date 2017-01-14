@@ -13,7 +13,6 @@
 namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\AuthenticationInterface;
-use erdiko\users\models\User; // @note this is a circular reference
 
 use \Firebase\JWT\JWT;
 
@@ -75,7 +74,7 @@ class JWTAuthentication implements AuthenticationInterface
         $role = $this->role->findById($user->getRole());
 
         if(empty($role)) {
-            throw new \Exception("Role was not found for user " . $user->getUserId());
+            throw new \Exception("Role was not found for user");
         }
 
         // collect token data
