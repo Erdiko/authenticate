@@ -13,6 +13,9 @@ namespace erdiko\authenticate;
 
 interface AuthenticationInterface
 {
-  public function login($credentials);
-  // public function verify($token = null);
+
+    public function login($credentials);
+
+    public function verify($credentials);
+
 }

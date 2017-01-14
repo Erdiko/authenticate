@@ -54,38 +54,13 @@ class JWTAuthenticator implements AuthenticatorInterface
 
     /**
      * current_user
-     *
-     * Returns the user (currently logged in) from the storage container
-     *
      */
-	public function currentUser()
-	{
-		try {
-			$store = $this->container["STORAGES"][$this->selectedStorage];
-			$user  = $store->attemptLoad($this->erdikoUser);
-			if(empty($user)) $user = $this->erdikoUser->getAnonymous();
-
-		} catch (\Exception $e) {
-			$user = $this->erdikoUser->getAnonymous();
-		}
-		return $user;
-	}
+	public function currentUser() { }
 
     /**
      * logout
-     *
-     * Kill the session
-     *
      */
-	public function logout()
-	{
-		try{
-			$store = $this->container["STORAGES"][$this->selectedStorage];
-			$store->destroy();
-		} catch (\Exception $e) {
-			throw new \Exception($e->getMessage());
-		}
-	}
+	public function logout() { }
 
     /**
      * login
@@ -123,17 +98,17 @@ class JWTAuthenticator implements AuthenticatorInterface
 	}
 
     /**
-     * decodeJWT
+     * verify
      *
      * Decode the JWT via the service model
      *
      */
-    public function decodeJWT($credentials, $type = 'mock')
+    public function verify($credentials, $type = 'mock')
     {
 		$result = false;
 		try {
 			$auth = $this->container["AUTHENTICATIONS"][$type];
-            $result = $auth->decodeJWT($credentials);
+            $result = $auth->verify($credentials);
 		} catch (\Exception $e) {
 			\error_log($e->getMessage());
 		}

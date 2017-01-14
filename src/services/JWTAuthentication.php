@@ -20,17 +20,40 @@ use \Firebase\JWT\JWT;
 class JWTAuthentication implements AuthenticationInterface
 {
 
+    protected $user;
+
+    protected $role;
+
+    /**
+     *
+     *
+     */
+    public function __construct($user = null, $role = null) 
+    {
+        if(!empty($user)) {
+            $this->user = $user;
+        } else {
+            $this->user = new \erdiko\users\models\User();
+        }
+
+        if(!empty($role)) {
+            $this->role = $role;
+        } else {
+            $this->role = new \erdiko\users\models\Role();
+        }
+
+    }
+
     /**
      * login
      *
      */
-    public function login( $credentials ) 
+    public function login($credentials) 
     {
-		$user = new User();
 		$username = (array_key_exists('username', $credentials)) ? $credentials['username'] : '';
         $password = (array_key_exists('password', $credentials)) ? $credentials['password'] : '';
 
-        $user = $user->authenticate($username, $password);
+        $user = $this->user->authenticate($username, $password);
 
         if(empty($user) || false == $user) {
             throw new \Exception("User was not found");
@@ -49,8 +72,7 @@ class JWTAuthentication implements AuthenticationInterface
 
         // get the logged in user role
         // @note this relies on the users package so would be a circular reference -john
-        $roleModel = new \erdiko\users\models\Role();
-        $role = $roleModel->findById($user->getRole());
+        $role = $this->role->findById($user->getRole());
 
         if(empty($role)) {
             throw new \Exception("Role was not found for user " . $user->getUserId());
@@ -82,7 +104,7 @@ class JWTAuthentication implements AuthenticationInterface
      * decodeJWT
      *
      */
-    public function decodeJWT($credentials)
+    public function verify($credentials)
     {
 
         if(!array_key_exists("jwt", $credentials) || empty($credentials["jwt"])) {
