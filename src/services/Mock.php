@@ -9,7 +9,7 @@
 
 namespace erdiko\authenticate\services;
 
-class Mock implements erdiko\authenticate\AuthenticationInterface
+class Mock implements \erdiko\authenticate\AuthenticationInterface
 {
 	public function login($credentials)
 	{
