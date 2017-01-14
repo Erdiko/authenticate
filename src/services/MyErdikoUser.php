@@ -54,7 +54,8 @@ class MyErdikoUser implements UserStorageInterface
 		return $response;
 	}
 
-	public static function unmarshall($encoded) {
+    public static function unmarshall($encoded) 
+    {
 		// TODO: Implement unmarshall() method.
 		$decode = json_decode( $encoded, true );
 		if(empty($decode)){
@@ -100,7 +101,8 @@ class MyErdikoUser implements UserStorageInterface
 	public function isAnonymous()
 	{
 		return ($this->username == "anonymous");
-	}
+    }
+
 	/**
 	 * @return mixed
 	 */
