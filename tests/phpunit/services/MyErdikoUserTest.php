@@ -5,6 +5,7 @@
  */
 namespace tests\phpunit;
 
+use erdiko\authenticate\services\MyErdikoUser;
 
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
 
@@ -22,8 +23,24 @@ class MyErdikoUserTest extends \tests\ErdikoTestCase
     protected function setUp()
     {
         @session_start();
-        //error_reporting(E_ALL);
-        //ini_set('display_errors', 1);
+    }
+
+    /**
+     *
+     *
+     */
+    public function testMarshall()
+    {
+        $this->markTestSkipped('needs to be completed');
+    }
+
+    /**
+     *
+     *
+     */
+    public function testUnmarshall() 
+    {
+        $this->markTestSkipped('needs to be completed');
     }
 
 }

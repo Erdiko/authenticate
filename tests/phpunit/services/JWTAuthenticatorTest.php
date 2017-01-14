@@ -5,9 +5,10 @@
  */
 namespace tests\phpunit;
 
+use erdiko\authenticate\services\JWTAuthenticator;
+use erdiko\authenticate\services\MyErdikoUser;
 
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
-
 
 class JWTAuthenticatorTest extends \tests\ErdikoTestCase
 {
@@ -24,6 +25,36 @@ class JWTAuthenticatorTest extends \tests\ErdikoTestCase
         @session_start();
         //error_reporting(E_ALL);
         //ini_set('display_errors', 1);
+    }
+
+    /**
+     *
+     *
+     */
+    public function testConstructor()
+    {
+		$jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+		$this->assertInstanceOf(JWTAuthenticator::class, $jwtAuth);
+    }
+
+    /**
+     *
+     *
+     */
+    public function testLogin()
+    {
+        $this->markTestSkipped('needs to be completed');
+        $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+    }
+
+    /**
+     *
+     *
+     */
+    public function testDecodeJWT()
+    {
+        $this->markTestSkipped('needs to be completed');
+        $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
     }
 
 }
