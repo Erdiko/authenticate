@@ -43,7 +43,6 @@ class JWTAuthenticatorTest extends \tests\ErdikoTestCase
      */
     public function testLogin()
     {
-        $this->markTestSkipped('needs to be completed');
         $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
     }
 
@@ -53,7 +52,6 @@ class JWTAuthenticatorTest extends \tests\ErdikoTestCase
      */
     public function testDecodeJWT()
     {
-        $this->markTestSkipped('needs to be completed');
         $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
     }
 

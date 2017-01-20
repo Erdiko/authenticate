@@ -32,6 +32,10 @@ class Mock implements \erdiko\authenticate\AuthenticationInterface
 				break;
 		}
 		return $user;
-	}
+    }
+
+    public function verify($credentials = null) { 
+        return true;
+    }
 }
 

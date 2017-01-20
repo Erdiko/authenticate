@@ -71,7 +71,8 @@ class BasicAuthenticatorTest extends \tests\ErdikoTestCase
 	 * @depends testCreate
 	 */
 	public function testLogin()
-	{
+    {
+
         $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
 		$basic->login(array('username'=>'foo@mail.com'), 'mock');
 
