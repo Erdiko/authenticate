@@ -78,22 +78,20 @@ class JWTAuthenticator implements AuthenticatorInterface
 			$this->logout();
         }
 
-		$result = false;
-		try {
-			$auth = $this->container["AUTHENTICATIONS"][$type];
-            $result = $auth->login($credentials);
-            if(isset($result->user))
-            	$user = $result->user;
-            else
-            	throw new \Exception("user failed to load");
+        $result = false;
 
-			if(!empty($user) && (false !== $user)) {
-				$this->persistUser( $user );
-				$response = true;
-			}
-		} catch (\Exception $e) {
-			\error_log($e->getMessage());
-		}
+        $auth = $this->container["AUTHENTICATIONS"][$type];
+        $result = $auth->login($credentials);
+        if(isset($result->user))
+            $user = $result->user;
+        else
+            throw new \Exception("user failed to load");
+
+        if(!empty($user) && (false !== $user)) {
+            $this->persistUser( $user );
+            $response = true;
+        }
+
 		return $result;
 	}
 
