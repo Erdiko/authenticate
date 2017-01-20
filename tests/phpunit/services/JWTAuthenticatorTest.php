@@ -41,18 +41,62 @@ class JWTAuthenticatorTest extends \tests\ErdikoTestCase
      *
      *
      */
-    public function testLogin()
+    public function testLoginNoUser()
     {
         $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+
+        $authParams = array(
+            'username'      =>  "fake@mail.com",
+            'password'      =>  "password"
+        );
+
+        $this->expectException('Exception');
+        $result = $jwtAuth->login($authParams);
     }
 
     /**
      *
      *
      */
-    public function testDecodeJWT()
+    public function testLogin()
     {
         $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+
+        $authParams = array(
+            'secret_key'    =>  "abc123",
+            'username'      =>  "jwt@mail.com",
+            'password'      =>  "password"
+        );
+
+        $result = $jwtAuth->login($authParams, 'mock');
+
+        // make sure the user is returned
+		$this->assertNotEmpty($result);
+		$this->assertEquals('JWT', $result->user->getDisplayName());
+		$this->assertFalse($result->user->isAdmin());
+		$this->assertTrue($result->user->hasRole('client'));
+
+        // make sure we get a JWT token returned
+		$this->assertNotEmpty($result->token);
+    }
+
+    /**
+     *
+     *
+     */
+    public function testVerify()
+    {
+        $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+ 
+        $authParams = array(
+            'secret_key'    =>  "abc123",
+            'username'      =>  "jwt@mail.com",
+            'password'      =>  "password"
+        );
+   
+        $result = $jwtAuth->verify($authParams);
+
+		$this->assertTrue($result);
     }
 
 }

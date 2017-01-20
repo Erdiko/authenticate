@@ -29,6 +29,20 @@ class Mock implements \erdiko\authenticate\AuthenticationInterface
 				$user->setDisplayName('Bar');
 				$user->setUserId(2);
 				$user->setRoles(array("admin"));
+                break;
+			case "jwt@mail.com":
+				$user->setUsername('jwt');
+				$user->setDisplayName('JWT');
+				$user->setUserId(2);
+				$user->setRoles(array("client"));
+
+                $result = (object)array(
+                    "user"  => $user,
+                    "token" => "abc1234"
+                );
+
+                return $result;
+
 				break;
 		}
 		return $user;
