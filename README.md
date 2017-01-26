@@ -1,5 +1,7 @@
 # Authenticate
 
+[![Package version](https://img.shields.io/packagist/v/erdiko/authenticate.svg?style=flat-square)](https://packagist.org/packages/erdiko/authenticate)
+
 **User Authentication**
 
 
