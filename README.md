@@ -45,9 +45,9 @@ Here's an example of config file
 {
   "authentication": {
     "available_types": [{
-      "name": "mock",
-      "namespace": "erdiko_authenticate_Services",
-      "classname": "Mock",
+      "name": "jwt_auth",
+      "namespace": "erdiko_authenticate_services",
+      "classname": "JWTAuthentication",
       "enabled": true
     }]
   },
