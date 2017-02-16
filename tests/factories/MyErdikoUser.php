@@ -7,7 +7,7 @@
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-namespace erdiko\authenticate\services;
+namespace erdiko\authenticate\tests\factories;
 
 use erdiko\authenticate\UserStorageInterface;
 

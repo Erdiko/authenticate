@@ -5,13 +5,16 @@
  */
 namespace tests\phpunit;
 
-use erdiko\authenticate\services\BasicAuthenticator;
-use erdiko\authenticate\services\MyErdikoUser;
-
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/Mock.php';
+
+use erdiko\authenticate\services\BasicAuthenticator;
+use erdiko\authenticate\tests\factories\MyErdikoUser;
+use \tests\ErdikoTestCase;
 
 
-class BasicAuthenticatorTest extends \tests\ErdikoTestCase
+class BasicAuthenticatorTest extends ErdikoTestCase
 {
 	public static function setUpBeforeClass()
     {
@@ -26,6 +29,7 @@ class BasicAuthenticatorTest extends \tests\ErdikoTestCase
         @session_start();
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
+        putenv("ERDIKO_CONTEXT=tests");
     }
 
 	public function testCreate()
@@ -72,7 +76,6 @@ class BasicAuthenticatorTest extends \tests\ErdikoTestCase
 	 */
 	public function testLogin()
     {
-
         $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
 		$basic->login(array('username'=>'foo@mail.com'), 'mock');
 

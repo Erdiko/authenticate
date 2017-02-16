@@ -43,7 +43,7 @@ class BuilderTest extends \tests\ErdikoTestCase
 	public $auth_json = "{\"authentication\": {
 \"available_types\": [{
       \"name\": \"mock\",
-      \"namespace\": \"erdiko_authenticate_Services\",
+      \"namespace\": \"erdiko_authenticate_tests_factories\",
       \"classname\": \"Mock\",
       \"enabled\": true
     }, {

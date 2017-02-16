@@ -5,13 +5,17 @@
  */
 namespace tests\phpunit\services;
 
-use erdiko\authenticate\services\MyErdikoUser;
-use erdiko\authenticate\services\SessionStorage;
-
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/Mock.php';
+
+use erdiko\authenticate\tests\factories\MyErdikoUser;
+use erdiko\authenticate\services\SessionStorage;
+use \tests\ErdikoTestCase;
 
 
-class SessionStorageTest extends \tests\ErdikoTestCase
+
+class SessionStorageTest extends ErdikoTestCase
 {
 	public $session = null;
 	public $user;

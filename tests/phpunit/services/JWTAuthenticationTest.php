@@ -5,13 +5,15 @@
  */
 namespace tests\phpunit;
 
-use erdiko\authenticate\services\JWTAuthentication;
-use erdiko\authenticate\services\MyErdikoUser;
-
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/Mock.php';
+
+use erdiko\authenticate\services\JWTAuthentication;
+use \tests\ErdikoTestCase;
 
 
-class JWTAuthenticationTest extends \tests\ErdikoTestCase
+class JWTAuthenticationTest extends ErdikoTestCase
 {
 
     protected $mockUser;

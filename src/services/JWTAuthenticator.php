@@ -68,7 +68,7 @@ class JWTAuthenticator implements AuthenticatorInterface
      * Attempt to log the user in via service model
      *
      */
-	public function login($credentials = array(), $type = 'mock')
+	public function login($credentials = array(), $type = 'jwt_auth')
     {
         $storage = $this->container["STORAGES"][$this->selectedStorage];
 
@@ -101,7 +101,7 @@ class JWTAuthenticator implements AuthenticatorInterface
      * Decode the JWT via the service model
      *
      */
-    public function verify($credentials, $type = 'mock')
+    public function verify($credentials, $type = 'jwt_auth')
     {
 		$result = false;
 		try {
