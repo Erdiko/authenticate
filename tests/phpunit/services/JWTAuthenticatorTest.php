@@ -20,6 +20,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
     {
         @session_start();
 		$_SESSION = array();
+		putenv('ERDIKO_CONTEXT=tests');
 		ini_set("session.use_cookies",0);
 		ini_set("session.use_only_cookies",0);
 	}
