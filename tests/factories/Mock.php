@@ -7,9 +7,11 @@
  * @author      Leo Daidone, leo@arroyolabs.com
  */
 
-namespace erdiko\authenticate\services;
+namespace erdiko\authenticate\tests\factories;
 
-class Mock implements \erdiko\authenticate\AuthenticationInterface
+use \erdiko\authenticate\AuthenticationInterface;
+
+class Mock implements AuthenticationInterface
 {
 	public function login($credentials)
 	{

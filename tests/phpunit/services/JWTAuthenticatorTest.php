@@ -5,17 +5,22 @@
  */
 namespace tests\phpunit;
 
-use erdiko\authenticate\services\JWTAuthenticator;
-use erdiko\authenticate\services\MyErdikoUser;
-
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
+require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/Mock.php';
 
-class JWTAuthenticatorTest extends \tests\ErdikoTestCase
+use erdiko\authenticate\services\JWTAuthenticator;
+use erdiko\authenticate\tests\factories\MyErdikoUser;
+use \tests\ErdikoTestCase;
+
+
+class JWTAuthenticatorTest extends ErdikoTestCase
 {
 	public static function setUpBeforeClass()
     {
         @session_start();
 		$_SESSION = array();
+		putenv('ERDIKO_CONTEXT=tests');
 		ini_set("session.use_cookies",0);
 		ini_set("session.use_only_cookies",0);
 	}
@@ -94,7 +99,7 @@ class JWTAuthenticatorTest extends \tests\ErdikoTestCase
             'password'      =>  "password"
         );
    
-        $result = $jwtAuth->verify($authParams);
+        $result = $jwtAuth->verify($authParams,'mock');
 
 		$this->assertTrue($result);
     }

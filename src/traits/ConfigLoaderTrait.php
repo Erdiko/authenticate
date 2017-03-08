@@ -20,6 +20,6 @@ trait ConfigLoaderTrait
     if($context==null)
       $context = getenv('ERDIKO_CONTEXT');
 
-	  return \erdiko\core\Helper::getConfig("authenticate",$context);
+    return \erdiko\core\Helper::getConfig("authenticate",$context);
   }
 }

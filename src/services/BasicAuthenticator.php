@@ -60,7 +60,7 @@ class BasicAuthenticator implements AuthenticatorInterface
 		return $user;
 	}
 
-	public function login($credentials = array(), $type = 'mock')
+	public function login($credentials = array(), $type = 'jwt_auth')
 	{
 		$storage = $this->container["STORAGES"][$this->selectedStorage];
 		// checks if it's already logged in
