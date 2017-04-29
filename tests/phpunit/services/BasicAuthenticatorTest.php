@@ -16,9 +16,9 @@ use \tests\ErdikoTestCase;
 
 class BasicAuthenticatorTest extends ErdikoTestCase
 {
+
 	public static function setUpBeforeClass()
     {
-        @session_start();
 		$_SESSION = array();
 		ini_set("session.use_cookies",0);
 		ini_set("session.use_only_cookies",0);
@@ -26,10 +26,15 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 
     protected function setUp()
     {
-        @session_start();
+        global $_SESSION;
         error_reporting(E_ALL);
         ini_set('display_errors', 1);
         putenv("ERDIKO_CONTEXT=tests");
+    }
+
+    public function tearDown()
+    {
+        $_SESSION = array();
     }
 
 	public function testCreate()
@@ -64,11 +69,16 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 	 */
 	public function testCurrentUser()
 	{
-		$basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
-		$basic->persistUser(MyErdikoUser::getAnonymous());
-		$current = $basic->currentUser();
+	    try {
+            $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
+            $basic->persistUser(MyErdikoUser::getAnonymous());
+            $this->assertNotEmpty($_SESSION['current_user']);
+            $current = $basic->currentUser();
 
-		$this->assertEquals($current, MyErdikoUser::unmarshall($_SESSION['current_user']));
+            $this->assertEquals($current, MyErdikoUser::unmarshall($_SESSION['current_user']));
+        } catch (\Exception $e) {
+	        var_dump($e->getMessage());
+        }
 	}
 
 	/**

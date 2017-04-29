@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserChecker;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -28,11 +28,11 @@ class AuthenticationManager implements AuthenticationManagerInterface
     public function __construct(UserProviderInterface $userProvider, $passwordEncoder=null)
     {
         $passwordEncoder = empty($passwordEncoder)
-            ? new PlaintextPasswordEncoder()
+            ? new BCryptPasswordEncoder(10)
             : $passwordEncoder;
         // Create an encoder factory that will "encode" passwords
         $encoderFactory = new \Symfony\Component\Security\Core\Encoder\EncoderFactory(array(
-            // We simply use plaintext passwords for users from this specific class
+            // In case you don't provide a Password encoder, it will use BCrypt as default
             'Symfony\Component\Security\Core\User\User' => $passwordEncoder,
         ));
 

@@ -16,6 +16,7 @@ use erdiko\authenticate\AuthenticationManager;
 use Symfony\Component\Security\Core\User\InMemoryUserProvider;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
+
 class AuthenticationManagerTest  extends ErdikoTestCase
 {
     public $userProvider;
@@ -25,11 +26,13 @@ class AuthenticationManagerTest  extends ErdikoTestCase
         $this->userProvider = new InMemoryUserProvider(
             array(
                 'bar@mail.com' => array(
-                    'password' => 'asdf1234',
+                    // plain: asdf1234
+                    'password' => '$2y$10$zlyw7wJinnKfsySiWF5daOkxDycAghCjDuiNS4ykn1dOprzoehnde',
                     'roles'    => array('ROLE_ADMIN'),
                 ),
                 'foo@mail.com' => array(
-                    'password' => 'asdf1234',
+                    // plain: asdf1234
+                    'password' => '$2y$10$zlyw7wJinnKfsySiWF5daOkxDycAghCjDuiNS4ykn1dOprzoehnde',
                     'roles'    => array('ROLE_USER'),
                 ),
             )
@@ -54,7 +57,6 @@ class AuthenticationManagerTest  extends ErdikoTestCase
             $auth = new AuthenticationManager($this->userProvider);
             $token = new UsernamePasswordToken('email', 'password', 'main', array());
             $tokenInvalid = $auth->authenticate($token);
-            var_dump($tokenInvalid);
         } catch (\Exception $e) {
             $this->assertEquals('Bad credentials.',$e->getMessage());
         }

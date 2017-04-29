@@ -24,7 +24,10 @@ Class SessionStorage implements StorageInterface {
 	public function attemptLoad(UserStorageInterface $userModel)
 	{
 		$user = null;
-		$this->startSession();
+
+
+		//$this->startSession();
+
 		if(array_key_exists("current_user", $_SESSION)){
 			$_user = $_SESSION["current_user"];
 			if(!empty($_user)){
@@ -40,7 +43,7 @@ Class SessionStorage implements StorageInterface {
 		if(array_key_exists("current_user", $_SESSION)){
 			unset($_SESSION["current_user"]);
 		}
-		session_destroy();
+		@session_destroy();
 	}
 
 	private function startSession()
@@ -52,7 +55,7 @@ Class SessionStorage implements StorageInterface {
 		if(session_id() == '') {
 			@session_start();
 		} else {
-			if (session_status() == PHP_SESSION_NONE) {
+			if (session_status() === PHP_SESSION_NONE) {
 				@session_start();
 			}
 		}
