@@ -26,7 +26,8 @@ Class SessionStorage implements StorageInterface {
 		$user = null;
 
 		$sapi = php_sapi_name();
-		if(!strpos('cli', $sapi)){
+		
+		if(strpos('cli', $sapi)<0){
 			$this->startSession();
 		}
 
