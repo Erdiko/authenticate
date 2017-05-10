@@ -26,8 +26,7 @@ Class SessionStorage implements StorageInterface {
 		$user = null;
 
 		$sapi = php_sapi_name();
-		
-		if(strpos('cli', $sapi)<0){
+		if(!$this->contains('cli', $sapi)){
 			$this->startSession();
 		}
 
@@ -38,6 +37,11 @@ Class SessionStorage implements StorageInterface {
 			}
 		}
 		return $user;
+	}
+
+	public function contains($needle, $haystack)
+	{
+		return strpos($haystack, $needle) !== false;
 	}
 
 	public function destroy()
