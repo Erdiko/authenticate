@@ -11,11 +11,13 @@ This is compatible with PHP 5.4 or above and the latest version of Erdiko.
 
 Requirements
 ------------
-This package requires Pimple version 3.0 or above.
+This package requires Pimple version 3.0 or above, and Symfony-security package version 3.2 or above.
 If this dependency is not installed automatically when you run `composer update` in your project folder
 please add to the project by
 
 `composer require pimple/pimple`
+
+`composer require symfony/security`
 
 Installation
 ------------

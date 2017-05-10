@@ -13,10 +13,9 @@ use erdiko\authenticate\tests\factories\MyErdikoUser;
 use erdiko\authenticate\services\SessionStorage;
 use \tests\ErdikoTestCase;
 
-
-
 class SessionStorageTest extends ErdikoTestCase
 {
+
 	public $session = null;
 	public $user;
 
@@ -29,6 +28,7 @@ class SessionStorageTest extends ErdikoTestCase
 
 	public function setUp()
 	{
+        if ( !isset( $_SESSION ) ) $_SESSION = array(  );
 		$this->session = new SessionStorage();
 		$this->user = new MyErdikoUser();
 	}
@@ -60,12 +60,20 @@ class SessionStorageTest extends ErdikoTestCase
 		$this->assertTrue($current_user->hasRole('client'));
 	}
 
+	public function testAttemptLoadNoSession()
+	{
+		$this->user->setUsername("test@arroyolabs.com");
+		$this->user->setRoles(array("admin"));
+
+		$current = $this->session->attemptLoad($this->user);
+		$this->assertNull($current);
+	}
+
 	public function testAttemptLoad()
 	{
 		$this->user->setUsername("test@arroyolabs.com");
 		$this->user->setRoles(array("admin"));
 		$this->session->persist($this->user);
-
 		$current = $this->session->attemptLoad($this->user);
 		$this->assertNotEmpty($current);
 		$this->assertTrue($current->isAdmin());
