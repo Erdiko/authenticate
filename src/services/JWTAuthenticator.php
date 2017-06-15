@@ -62,34 +62,33 @@ class JWTAuthenticator implements AuthenticatorInterface
      */
 	public function logout() { }
 
-    /**
+	/**
      * login
      *
      * Attempt to log the user in via service model
      *
      */
 	public function login($credentials = array(), $type = 'jwt_auth')
-    {
-        $storage = $this->container["STORAGES"][$this->selectedStorage];
+	{
+		$storage = $this->container["STORAGES"][$this->selectedStorage];
+		$result = false;
 
 		// checks if it's already logged in
 		$user = $storage->attemptLoad($this->erdikoUser);
-		if($user instanceof iErdikoUser){
+		if($user instanceof iErdikoUser) {
 			$this->logout();
-        }
+		}
 
-        $result = false;
-
-        $auth = $this->container["AUTHENTICATIONS"][$type];
-        $result = $auth->login($credentials);
-        if(isset($result->user))
-            $user = $result->user;
-        else
-            throw new \Exception("user failed to load");
+		$auth = $this->container["AUTHENTICATIONS"][$type];
+		$result = $auth->login($credentials);
+		if(isset($result->user))
+			$user = $result->user;
+		else
+        	throw new \Exception("User failed to load");
 
         if(!empty($user) && (false !== $user)) {
-            $this->persistUser( $user );
-            $response = true;
+        	$this->persistUser( $user );
+        	$response = true;
         }
 
 		return $result;
@@ -112,5 +111,4 @@ class JWTAuthenticator implements AuthenticatorInterface
 		}
 		return $result;
     }
-
 }
