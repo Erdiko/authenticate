@@ -27,18 +27,18 @@ class JWTAuthentication implements AuthenticationInterface
      *
      *
      */
-    public function __construct($user = null, $role = null) 
+    public function __construct($user = null, $role = null)
     {
         if(!empty($user)) {
             $this->user = $user;
         } else {
-            $this->user = new \erdiko\users\models\User();
+            $this->user = new \erdiko\users\models\User;
         }
 
         if(!empty($role)) {
             $this->role = $role;
         } else {
-            $this->role = new \erdiko\users\models\Role();
+            $this->role = new \erdiko\users\models\Role;
         }
 
     }
@@ -47,7 +47,7 @@ class JWTAuthentication implements AuthenticationInterface
      * login
      *
      */
-    public function login($credentials) 
+    public function login($credentials)
     {
 		$username = (array_key_exists('username', $credentials)) ? $credentials['username'] : '';
         $password = (array_key_exists('password', $credentials)) ? $credentials['password'] : '';
@@ -55,10 +55,10 @@ class JWTAuthentication implements AuthenticationInterface
         $user = $this->user->authenticate($username, $password);
 
         if(empty($user) || false == $user) {
-            throw new \Exception("User was not found");
+            throw new \Exception("Invalid username or password");
         }
 
-        // make sure we have a secret key to create the JWT 
+        // make sure we have a secret key to create the JWT
         if(!array_key_exists("secret_key", $credentials) || empty($credentials["secret_key"])) {
             throw new \Exception("Secret Key is required to create a JWT");
         }
@@ -74,14 +74,14 @@ class JWTAuthentication implements AuthenticationInterface
         $role = $this->role->findById($user->getRole());
 
         if(empty($role)) {
-            throw new \Exception("Role was not found for user");
+            throw new \Exception("User is missing a role");
         }
 
         // collect token data
         $token = array(
             "id"    => $user->getUserId(),
             "email" => $user->getEntity()->getEmail(),
-            "name"  => $user->getEntity()->getName(), 
+            "name"  => $user->getEntity()->getName(),
             "role"  => array(
                 "id"    => $role->getId(),
                 "name"  => $role->getName()
@@ -101,21 +101,21 @@ class JWTAuthentication implements AuthenticationInterface
 
     /**
      * decodeJWT
-     *
+     * @param array $credentials
+     * @return string $token
      */
     public function verify($credentials)
     {
-
         if(!array_key_exists("jwt", $credentials) || empty($credentials["jwt"])) {
             throw new \Exception("JWT is required");
         }
 
-        // make sure we have a secret key to decode the JWT 
+        // Make sure we have a secret key to decode the JWT
         if(!array_key_exists("secret_key", $credentials) || empty($credentials["secret_key"])) {
             throw new \Exception("Secret Key is required to decode this JWT");
         }
 
-        // get hash alg from params, default to HS256
+        // Get hash alg from params, default to HS256
         $hashAlgs = array("HS256");
         if(array_key_exists("hash_alg", $credentials) && !empty($credentials["hash_alg"])) {
             $hashAlgs[] = $credentials["hash_alg"];
@@ -131,5 +131,5 @@ class JWTAuthentication implements AuthenticationInterface
 
         return $token;
     }
-    
+
 }
