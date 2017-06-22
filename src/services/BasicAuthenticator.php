@@ -9,7 +9,10 @@
 namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\AuthenticatorInterface;
+use erdiko\authenticate\MD5PasswordEncoder;
 use erdiko\authenticate\UserStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\InMemoryUserProvider;
 
 class BasicAuthenticator implements AuthenticatorInterface
 {
@@ -42,6 +45,9 @@ class BasicAuthenticator implements AuthenticatorInterface
 		try {
 			$store = $this->container["STORAGES"][$this->selectedStorage];
 			$store->persist($user);
+
+			// @todo: call authenticate manager
+			$this->generateTokenStorage($user);
 		} catch (\Exception $e) {
 			throw new \Exception($e->getMessage());
 		}
@@ -87,6 +93,7 @@ class BasicAuthenticator implements AuthenticatorInterface
 		try{
 			$store = $this->container["STORAGES"][$this->selectedStorage];
 			$store->destroy();
+			unset($_SESSION['tokenstorage']);
 		} catch (\Exception $e) {
 			throw new \Exception($e->getMessage());
 		}
@@ -102,5 +109,13 @@ class BasicAuthenticator implements AuthenticatorInterface
 			}
 		}
 		return $result;
+	}
+
+	public function generateTokenStorage(UserStorageInterface $user)
+	{
+		$entityUser = $user->getEntity();
+
+		$userToken = new UsernamePasswordToken($entityUser->getEmail(),$entityUser->getPassword(),'main',array($entityUser->getRole()));
+		$_SESSION['tokenstorage'] = $userToken;
 	}
 }

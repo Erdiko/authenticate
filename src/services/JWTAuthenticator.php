@@ -16,7 +16,10 @@
 namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\AuthenticatorInterface;
+use erdiko\authenticate\MD5PasswordEncoder;
 use erdiko\authenticate\UserStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\InMemoryUserProvider;
 
 class JWTAuthenticator implements AuthenticatorInterface
 {
@@ -50,7 +53,9 @@ class JWTAuthenticator implements AuthenticatorInterface
     /**
      * persistUser
      */
-	public function persistUser(UserStorageInterface $user) { }
+	public function persistUser(UserStorageInterface $user) {
+		$this->generateTokenStorage($user);
+	}
 
     /**
      * current_user
@@ -111,4 +116,12 @@ class JWTAuthenticator implements AuthenticatorInterface
 		}
 		return $result;
     }
+
+	public function generateTokenStorage(UserStorageInterface $user)
+	{
+		$entityUser = $user->getEntity();
+
+		$userToken = new UsernamePasswordToken($entityUser->getEmail(),$entityUser->getPassword(),'main',$user->getRoles());
+		$_SESSION['tokenstorage'] = $userToken;
+	}
 }
