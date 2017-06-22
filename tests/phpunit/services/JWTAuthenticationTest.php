@@ -39,7 +39,7 @@ class JWTAuthenticationTest extends ErdikoTestCase
         'secret_key'    => '123abc',
         'jwt'           => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZW1haWwiOiJmb29AZXhhbXBsZS5jb20iLCJuYW1lIjoiRm9vIEJhciIsInJvbGUiOnsiaWQiOjEsIm5hbWUiOiJGb28ifSwiY3JlYXRlZCI6MTQ4NDM2MDc3Mn0.VW92jy5zK2LXdyq7yPGo_ilQK0sYH2yt3hrLYuWSBKM'
     );
-    
+
     /**
      *
      *
@@ -103,7 +103,7 @@ class JWTAuthenticationTest extends ErdikoTestCase
      * positive test of the login
      *
      */
-    public function testLogin() 
+    public function testLogin()
     {
         $this->mockUser->expects($this->once())
                        ->method('authenticate')
@@ -112,7 +112,7 @@ class JWTAuthenticationTest extends ErdikoTestCase
         $this->mockRole->expects($this->any())
                        ->method('findById')
                        ->will($this->returnValue($this->mockRoleEntity));
- 
+
         $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
 		$result = $auth->login($this->params);
 
@@ -124,7 +124,7 @@ class JWTAuthenticationTest extends ErdikoTestCase
      * make sure we throw an exception if we lack a secret key
      *
      */
-    public function testLoginNoSecret() 
+    public function testLoginNoSecret()
     {
         $this->mockUser->expects($this->once())
                        ->method('authenticate')
@@ -143,14 +143,14 @@ class JWTAuthenticationTest extends ErdikoTestCase
      * no user is found
      *
      */
-    public function testLoginNoUser() 
+    public function testLoginNoUser()
     {
         $this->mockUser->expects($this->once())
                        ->method('authenticate')
                        ->will($this->returnValue(false));
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage("User was not found");
+        $this->expectExceptionMessage("Invalid username or password");
 
         $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
 		$result = $auth->login($this->params);
@@ -160,7 +160,7 @@ class JWTAuthenticationTest extends ErdikoTestCase
      * no user role is found
      *
      */
-    public function testLoginNoUserRole() 
+    public function testLoginNoUserRole()
     {
 
         $this->mockUser->expects($this->once())
@@ -172,7 +172,7 @@ class JWTAuthenticationTest extends ErdikoTestCase
                        ->will($this->returnValue(false));
 
         $this->expectException('Exception');
-        $this->expectExceptionMessage("Role was not found for user");
+        $this->expectExceptionMessage("User is missing a role");
 
         $auth   = new JWTAuthentication($this->mockUser, $this->mockRole);
 		$result = $auth->login($this->params);
