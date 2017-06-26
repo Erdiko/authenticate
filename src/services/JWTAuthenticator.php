@@ -16,10 +16,8 @@
 namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\AuthenticatorInterface;
-use erdiko\authenticate\MD5PasswordEncoder;
 use erdiko\authenticate\UserStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\User\InMemoryUserProvider;
 
 class JWTAuthenticator implements AuthenticatorInterface
 {
@@ -80,7 +78,7 @@ class JWTAuthenticator implements AuthenticatorInterface
 
 		// checks if it's already logged in
 		$user = $storage->attemptLoad($this->erdikoUser);
-		if($user instanceof iErdikoUser) {
+		if($user instanceof UserStorageInterface) {
 			$this->logout();
 		}
 

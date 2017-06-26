@@ -6,11 +6,11 @@
 namespace tests\phpunit;
 
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
-require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/MockErdikoUser.php';
 require_once dirname(__DIR__) . '/../factories/Mock.php';
 
 use erdiko\authenticate\services\JWTAuthenticator;
-use erdiko\authenticate\tests\factories\MyErdikoUser;
+use \tests\factories\MockErdikoUser;
 use \tests\ErdikoTestCase;
 
 
@@ -28,8 +28,6 @@ class JWTAuthenticatorTest extends ErdikoTestCase
     protected function setUp()
     {
         @session_start();
-        //error_reporting(E_ALL);
-        //ini_set('display_errors', 1);
     }
 
     /**
@@ -38,7 +36,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testConstructor()
     {
-		$jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+		$jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
 		$this->assertInstanceOf(JWTAuthenticator::class, $jwtAuth);
     }
 
@@ -48,7 +46,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testLoginNoUser()
     {
-        $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
 
         $authParams = array(
             'username'      =>  "fake@mail.com",
@@ -65,7 +63,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testLogin()
     {
-        $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
 
         $authParams = array(
             'secret_key'    =>  "abc123",
@@ -91,7 +89,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testVerify()
     {
-        $jwtAuth = new JWTAuthenticator(MyErdikoUser::getAnonymous());
+        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
  
         $authParams = array(
             'secret_key'    =>  "abc123",
