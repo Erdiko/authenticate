@@ -17,6 +17,7 @@ namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\AuthenticatorInterface;
 use erdiko\authenticate\UserStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class JWTAuthenticator implements AuthenticatorInterface
 {
@@ -50,7 +51,9 @@ class JWTAuthenticator implements AuthenticatorInterface
     /**
      * persistUser
      */
-	public function persistUser(UserStorageInterface $user) { }
+	public function persistUser(UserStorageInterface $user) {
+		$this->generateTokenStorage($user);
+	}
 
     /**
      * current_user
@@ -75,7 +78,7 @@ class JWTAuthenticator implements AuthenticatorInterface
 
 		// checks if it's already logged in
 		$user = $storage->attemptLoad($this->erdikoUser);
-		if($user instanceof iErdikoUser) {
+		if($user instanceof UserStorageInterface) {
 			$this->logout();
 		}
 
@@ -111,4 +114,12 @@ class JWTAuthenticator implements AuthenticatorInterface
 		}
 		return $result;
     }
+
+	public function generateTokenStorage(UserStorageInterface $user)
+	{
+		$entityUser = $user->getEntity();
+
+		$userToken = new UsernamePasswordToken($entityUser->getEmail(),$entityUser->getPassword(),'main',$user->getRoles());
+		$_SESSION['tokenstorage'] = $userToken;
+	}
 }
