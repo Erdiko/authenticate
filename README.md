@@ -1,6 +1,8 @@
 # Authenticate
 
 [![Package version](https://img.shields.io/packagist/v/erdiko/authenticate.svg?style=flat-square)](https://packagist.org/packages/erdiko/authenticate)
+[![CircleCI](https://img.shields.io/circleci/project/github/Erdiko/authenticate/develop.svg?style=flat-square)](https://circleci.com/gh/Erdiko/authenticate)
+[![license](https://img.shields.io/github/license/erdiko/authenticate.svg?style=flat-square)](https://github.com/Erdiko/authenticate/blob/master/LICENSE)
 
 **User Authentication**
 
@@ -21,7 +23,7 @@ please add to the project by
 
 Installation
 ------------
-Add package using composer 
+Add package using composer
 
 `composer require erdiko/authenticate`
 
@@ -31,19 +33,19 @@ Before you start using this package, it needs some initial setup/config.
 
 ##### Add `authenticate.json` config.
 
-In this file will be defined two major components, the first one related with storage and the other related with 
+In this file will be defined two major components, the first one related with storage and the other related with
 authentication.
 
-For the storage we provided a SessionStorage service, but you can add your custom storage service just implementing 
+For the storage we provided a SessionStorage service, but you can add your custom storage service just implementing
 `erdiko\authenticate\Services\Storage` interface and adding it to the config file.
 
-Same way with the authentication, but in this case you will have to implement `erdiko\authenticate\Services\iAuth` 
+Same way with the authentication, but in this case you will have to implement `erdiko\authenticate\Services\iAuth`
 interface. An example of this is the `Mock` class provided.
-  
-Here's an example of config file 
+
+Here's an example of config file
 (you can copy from `<project>/vendor/erdiko/authenticate/app/config/default/authenticate.json`)
-  
-``` 
+
+```
 {
   "authentication": {
     "available_types": [{
@@ -65,18 +67,18 @@ Here's an example of config file
 }
 ```  
 
-As we mention above, the _authentication_ will define the available classes that 
-implements the user's validation logic. You can choose between a list of them defined in this config. For example, you 
-can have one class that allows you to authenticate using oAuth methods, other that use LDAP, other that use database, 
-and so on. 
+As we mention above, the _authentication_ will define the available classes that
+implements the user's validation logic. You can choose between a list of them defined in this config. For example, you
+can have one class that allows you to authenticate using oAuth methods, other that use LDAP, other that use database,
+and so on.
 
 Same for the storage section, except that you should use only one type at time, that's why this section has a `selected`
 field.
- 
-Let's breakdown the config fields. 
+
+Let's breakdown the config fields.
 In both cases:
 * _**name**_: is the key will be used to references an individual class.
-* _**namespace**_: represents a translated class namespace, e.g.: for `app\lib\service` should be `app_lib_services`, 
+* _**namespace**_: represents a translated class namespace, e.g.: for `app\lib\service` should be `app_lib_services`,
 the rule is: replace back slash with underscore.
 * _**classname**_: is the exact name of the class and it is case-sensitive.
 * _**enabled**_: True, if it's available to use, false, if you want to disable temporarily.
