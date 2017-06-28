@@ -50,17 +50,44 @@ class JWTAuthenticator implements AuthenticatorInterface
     /**
      * persistUser
      */
-	public function persistUser(UserStorageInterface $user) { }
+    public function persistUser(UserStorageInterface $user)
+    {
+        try {
+            $store = $this->container["STORAGES"]['session'];
+            $store->persist($user);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
     /**
      * current_user
      */
-	public function currentUser() { }
+    public function currentUser()
+    {
+        try {
+            $store = $this->container["STORAGES"]['session'];
+            $user  = $store->attemptLoad($this->erdikoUser);
+            if(empty($user)) $user = $this->erdikoUser->getAnonymous();
+
+        } catch (\Exception $e) {
+            $user = $this->erdikoUser->getAnonymous();
+        }
+        return $user;
+    }
 
     /**
      * logout
      */
-	public function logout() { }
+    public function logout()
+    {
+        try{
+            $store = $this->container["STORAGES"]['session'];
+            $store->destroy();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 
 	/**
      * login
@@ -68,31 +95,27 @@ class JWTAuthenticator implements AuthenticatorInterface
      * Attempt to log the user in via service model
      *
      */
-	public function login($credentials = array(), $type = 'jwt_auth')
-	{
-		$storage = $this->container["STORAGES"][$this->selectedStorage];
-		$result = false;
+    public function login($credentials = array(), $type = 'jwt_auth')
+    {
+        $storage = $this->container["STORAGES"][$this->selectedStorage];
+        $result = false;
 
-		// checks if it's already logged in
-		$user = $storage->attemptLoad($this->erdikoUser);
-		if($user instanceof iErdikoUser) {
-			$this->logout();
-		}
-
-		$auth = $this->container["AUTHENTICATIONS"][$type];
-		$result = $auth->login($credentials);
-		if(isset($result->user))
-			$user = $result->user;
-		else
-        	throw new \Exception("User failed to load");
-
-        if(!empty($user) && (false !== $user)) {
-        	$this->persistUser( $user );
-        	$response = true;
+        // checks if it's already logged in
+        $user = $storage->attemptLoad($this->erdikoUser);
+        if($user instanceof iErdikoUser) {
+            $this->logout();
         }
 
-		return $result;
-	}
+        $auth = $this->container["AUTHENTICATIONS"][$type];
+        $result = $auth->login($credentials);
+
+        if(!isset($result->user) || !$result->user) {
+            throw new \Exception("user failed to load");
+        }
+        $this->persistUser($result->user);
+
+        return $result;
+    }
 
     /**
      * verify
