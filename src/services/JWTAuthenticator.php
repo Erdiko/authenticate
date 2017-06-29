@@ -51,14 +51,31 @@ class JWTAuthenticator implements AuthenticatorInterface
     /**
      * persistUser
      */
-    public function persistUser(UserStorageInterface $user) {
+    public function persistUser(UserStorageInterface $user)
+    {
         $this->generateTokenStorage($user);
     }
 
     /**
      * current_user
      */
-    public function currentUser() { }
+    public function currentUser()
+    {
+        try {
+            if (!array_key_exists('tokenstorage',$_SESSION)) {
+                throw new \Exception('TokenStorage not found.');
+            }
+            $storeStorage = $_SESSION['tokenstorage'];
+            $users = $this->erdikoUser->getByParams(['email' => $storeStorage->getUsername()]);
+            if (!count($users)) {
+                throw new \Exception('User not found.');
+            }
+            $user = $users[0];
+        } catch (\Exception $e) {
+            $user = $this->erdikoUser->getAnonymous();
+        }
+        return $user;
+    }
 
     /**
      * logout
@@ -122,4 +139,5 @@ class JWTAuthenticator implements AuthenticatorInterface
         $userToken = new UsernamePasswordToken($entityUser->getEmail(),$entityUser->getPassword(),'main',$user->getRoles());
         $_SESSION['tokenstorage'] = $userToken;
     }
+
 }
