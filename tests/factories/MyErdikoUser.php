@@ -73,11 +73,28 @@ class MyErdikoUser implements UserStorageInterface
 		return $entity;
 	}
 
+	public function setEntity($entity)
+	{
+		if (!($entity instanceof  entity)) {
+			throw new \Exception('Parameter must be an entity User');
+		}
+		$this->_user = $entity;
+	}
+
+	/**
+	 *
+	 */
+	public function getEntity()
+	{
+		return self::unmarshall($this->marshall());
+	}
+
 	public static function getAnonymous()
 	{
 		$_user = new MyErdikoUser();
 		$_user->setUserId(0);
 		$_user->setRoles(array('anonymous'),true);
+		$_user->setEmail('anonymouys@mail.com');
 		return $_user;
 	}
 

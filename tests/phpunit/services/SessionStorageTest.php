@@ -6,12 +6,12 @@
 namespace tests\phpunit\services;
 
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
-require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/MockErdikoUser.php';
 require_once dirname(__DIR__) . '/../factories/Mock.php';
 
-use erdiko\authenticate\tests\factories\MyErdikoUser;
 use erdiko\authenticate\services\SessionStorage;
 use \tests\ErdikoTestCase;
+use tests\factories\MockErdikoUser;
 
 class SessionStorageTest extends ErdikoTestCase
 {
@@ -30,7 +30,7 @@ class SessionStorageTest extends ErdikoTestCase
 	{
         if ( !isset( $_SESSION ) ) $_SESSION = array(  );
 		$this->session = new SessionStorage();
-		$this->user = new MyErdikoUser();
+		$this->user = new MockErdikoUser();
 	}
 
 	public function tearDown()
@@ -41,29 +41,33 @@ class SessionStorageTest extends ErdikoTestCase
 
 	public function testSessionPersistAnnonymous()
 	{
-		$this->session->persist(MyErdikoUser::getAnonymous());
-		$current_user = MyErdikoUser::unmarshall($_SESSION["current_user"]);
+		$this->session->persist(MockErdikoUser::getAnonymous());
+		$current_user = MockErdikoUser::unmarshall($_SESSION["current_user"]);
 
 		$this->assertNotEmpty($current_user);
-		$this->assertTrue($current_user->isAnonymous());
+		$this->assertEquals('anonymous', $current_user->getRole());
 	}
 
 	public function testSessionPersist()
 	{
-		$this->user->setUsername("test@arroyolabs.com");
-		$this->user->setRoles(array("client"));
+		$entity = $this->user->getEntity();
+		$entity->setEmail("test@arroyolabs.com");
+		$entity->setRole("client");
+		$this->user->setEntity($entity);
 		$this->session->persist($this->user);
 
-		$current_user = MyErdikoUser::unmarshall($_SESSION["current_user"]);
+		$current_user = MockErdikoUser::unmarshall($_SESSION["current_user"]);
 
 		$this->assertNotEmpty($current_user);
-		$this->assertTrue($current_user->hasRole('client'));
+		$this->assertEquals('client', $current_user->getRole());
 	}
 
 	public function testAttemptLoadNoSession()
 	{
-		$this->user->setUsername("test@arroyolabs.com");
-		$this->user->setRoles(array("admin"));
+		$entity = $this->user->getEntity();
+		$entity->setEmail("test@arroyolabs.com");
+		$entity->setRole("admin");
+		$this->user->setEntity($entity);
 
 		$current = $this->session->attemptLoad($this->user);
 		$this->assertNull($current);
@@ -71,17 +75,19 @@ class SessionStorageTest extends ErdikoTestCase
 
 	public function testAttemptLoad()
 	{
-		$this->user->setUsername("test@arroyolabs.com");
-		$this->user->setRoles(array("admin"));
+		$entity = $this->user->getEntity();
+		$entity->setEmail("test@arroyolabs.com");
+		$entity->setRole("admin");
+		$this->user->setEntity($entity);
 		$this->session->persist($this->user);
 		$current = $this->session->attemptLoad($this->user);
 		$this->assertNotEmpty($current);
-		$this->assertTrue($current->isAdmin());
+		$this->assertEquals('admin', $current->getRole());
 	}
 
 	public function testDestroy()
 	{
-		$this->session->persist(MyErdikoUser::getAnonymous());
+		$this->session->persist(MockErdikoUser::getAnonymous());
 		$this->session->destroy();
 		$this->assertFalse(isset($_SESSION["current_user"]));
 	}

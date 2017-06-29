@@ -6,11 +6,11 @@
 namespace tests\phpunit;
 
 require_once dirname(__DIR__) . '/../ErdikoTestCase.php';
-require_once dirname(__DIR__) . '/../factories/MyErdikoUser.php';
+require_once dirname(__DIR__) . '/../factories/MockErdikoUser.php';
 require_once dirname(__DIR__) . '/../factories/Mock.php';
 
-use erdiko\authenticate\services\BasicAuthenticator;
-use erdiko\authenticate\tests\factories\MyErdikoUser;
+use \erdiko\authenticate\services\BasicAuthenticator;
+use \tests\factories\MockErdikoUser;
 use \tests\ErdikoTestCase;
 
 
@@ -39,7 +39,7 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 
 	public function testCreate()
 	{
-		$basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
+		$basic = new BasicAuthenticator(MockErdikoUser::getAnonymous());
 		$this->assertInstanceOf(BasicAuthenticator::class, $basic);
 	}
 
@@ -48,7 +48,7 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 	 */
 	public function testGetAvailableAuthentications()
 	{
-		$basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
+		$basic = new BasicAuthenticator(MockErdikoUser::getAnonymous());
 		$result = $basic->getAvailableAuthentications();
 		$this->assertInternalType('array', $result);
 		$this->assertGreaterThan(0, count($result));
@@ -59,8 +59,9 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 	 */
 	public function testPersistUser()
     {
-        $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
-		$basic->persistUser(MyErdikoUser::getAnonymous());
+        $basic = new BasicAuthenticator(MockErdikoUser::getAnonymous());
+		$basic->persistUser(MockErdikoUser::getAnonymous());
+
 		$this->assertNotEmpty($_SESSION['current_user']);
 	}
 
@@ -70,12 +71,12 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 	public function testCurrentUser()
 	{
 	    try {
-            $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
-            $basic->persistUser(MyErdikoUser::getAnonymous());
+            $basic = new BasicAuthenticator(MockErdikoUser::getAnonymous());
+            $basic->persistUser(MockErdikoUser::getAnonymous());
             $this->assertNotEmpty($_SESSION['current_user']);
             $current = $basic->currentUser();
 
-            $this->assertEquals($current, MyErdikoUser::unmarshall($_SESSION['current_user']));
+            $this->assertEquals($current, MockErdikoUser::unmarshall($_SESSION['current_user']));
         } catch (\Exception $e) {
 	        var_dump($e->getMessage());
         }
@@ -86,15 +87,15 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 	 */
 	public function testLogin()
     {
-        $basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
+        $basic = new BasicAuthenticator(MockErdikoUser::getAnonymous());
 		$basic->login(array('username'=>'foo@mail.com'), 'mock');
-
+		// it return User entity instance
 		$current = $basic->currentUser();
 
 		$this->assertNotEmpty($current);
-		$this->assertEquals('Foo', $current->getDisplayName());
-		$this->assertFalse($current->isAdmin());
-		$this->assertTrue($current->hasRole('client'));
+		$this->assertEquals('Foo', $current->getName());
+		$this->assertFalse(($current->getRole()=='admin'));
+		$this->assertTrue(in_array($current->getRole(),['client']));
 	}
 
 	/**
@@ -102,11 +103,11 @@ class BasicAuthenticatorTest extends ErdikoTestCase
 	 */
 	public function testLogout()
 	{
-		$basic = new BasicAuthenticator(MyErdikoUser::getAnonymous());
+		$basic = new BasicAuthenticator(MockErdikoUser::getAnonymous());
 		$basic->logout();
 
 		$this->assertFalse(array_key_exists('current_user',$_SESSION));
 		$current = $basic->currentUser();
-		$this->assertEquals('anonymous', $current->getUsername());
+		$this->assertEquals('anonymous', $current->getRole());
 	}
 }

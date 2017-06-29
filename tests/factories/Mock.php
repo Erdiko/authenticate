@@ -10,6 +10,8 @@
 namespace erdiko\authenticate\tests\factories;
 
 use \erdiko\authenticate\AuthenticationInterface;
+use tests\factories\MockErdikoUser;
+use tests\factories\UserEntity;
 
 class Mock implements AuthenticationInterface
 {
@@ -18,28 +20,29 @@ class Mock implements AuthenticationInterface
 		/**
 		 * this is a mock login, I will fake users for testing purpose
 		 */
-		$user = new MyErdikoUser();
+		$_user = new MockErdikoUser();
+		$user = new UserEntity();
 		switch ($credentials['username']) {
 			case "foo@mail.com":
-				$user->setUsername('foo');
-				$user->setDisplayName('Foo');
-				$user->setUserId(1);
-				$user->setRoles(array("client"));
+				$user->setEmail($credentials['username']);
+				$user->setName('Foo');
+				$user->setId(1);
+				$user->setRole("client");
 				break;
 			case "bar@mail.com":
-				$user->setUsername('bar');
-				$user->setDisplayName('Bar');
-				$user->setUserId(2);
-				$user->setRoles(array("admin"));
+				$user->setEmail($credentials['username']);
+				$user->setName('Bar');
+				$user->setId(2);
+				$user->setRole("admin");
                 break;
 			case "jwt@mail.com":
-				$user->setUsername('jwt');
-				$user->setDisplayName('JWT');
-				$user->setUserId(2);
-				$user->setRoles(array("client"));
-
+				$user->setEmail($credentials['username']);
+				$user->setName('JWT');
+				$user->setId(2);
+				$user->setRole("client");
+				$_user->setEntity($user);
                 $result = (object)array(
-                    "user"  => $user,
+                    "user"  => $_user,
                     "token" => "abc1234"
                 );
 
@@ -47,7 +50,8 @@ class Mock implements AuthenticationInterface
 
 				break;
 		}
-		return $user;
+		$_user->setEntity($user);
+		return $_user;
     }
 
     public function verify($credentials = null) { 
