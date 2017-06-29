@@ -17,79 +17,55 @@ namespace erdiko\authenticate\services;
 
 use erdiko\authenticate\AuthenticatorInterface;
 use erdiko\authenticate\UserStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class JWTAuthenticator implements AuthenticatorInterface
 {
-	use \erdiko\authenticate\traits\ConfigLoaderTrait;
-	use \erdiko\authenticate\traits\BuilderTrait;
+    use \erdiko\authenticate\traits\ConfigLoaderTrait;
+    use \erdiko\authenticate\traits\BuilderTrait;
 
-	private $config;
-	private $container;
-	private $selectedStorage;
+    private $config;
+    private $container;
+    private $selectedStorage;
 
-	protected $erdikoUser;
+    protected $erdikoUser;
 
     /**
      * __construct
      *
      */
-	public function __construct(UserStorageInterface $user)
-	{
-		$this->erdikoUser = $user;
-		$this->container = new \Pimple\Container();
-		$this->config = $this->loadFromJson();
-		// Storage
-		$this->selectedStorage = $this->config["storage"]["selected"];
-		$storage = $this->config["storage"]["storage_types"];
-		$this->buildStorages($storage);
-		// Authentications
-		$authentication = $this->config["authentication"]["available_types"];
-		$this->buildAuthenticator($authentication);
-	}
+    public function __construct(UserStorageInterface $user)
+    {
+        $this->erdikoUser = $user;
+        $this->container = new \Pimple\Container();
+        $this->config = $this->loadFromJson();
+        // Storage
+        $this->selectedStorage = $this->config["storage"]["selected"];
+        $storage = $this->config["storage"]["storage_types"];
+        $this->buildStorages($storage);
+        // Authentications
+        $authentication = $this->config["authentication"]["available_types"];
+        $this->buildAuthenticator($authentication);
+    }
 
     /**
      * persistUser
      */
-    public function persistUser(UserStorageInterface $user)
-    {
-        try {
-            $store = $this->container["STORAGES"]['session'];
-            $store->persist($user);
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
+    public function persistUser(UserStorageInterface $user) {
+        $this->generateTokenStorage($user);
     }
 
     /**
      * current_user
      */
-    public function currentUser()
-    {
-        try {
-            $store = $this->container["STORAGES"]['session'];
-            $user  = $store->attemptLoad($this->erdikoUser);
-            if(empty($user)) $user = $this->erdikoUser->getAnonymous();
-
-        } catch (\Exception $e) {
-            $user = $this->erdikoUser->getAnonymous();
-        }
-        return $user;
-    }
+    public function currentUser() { }
 
     /**
      * logout
      */
-    public function logout()
-    {
-        try{
-            $store = $this->container["STORAGES"]['session'];
-            $store->destroy();
-        } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
-        }
-    }
+    public function logout() { }
 
-	/**
+    /**
      * login
      *
      * Attempt to log the user in via service model
@@ -102,17 +78,21 @@ class JWTAuthenticator implements AuthenticatorInterface
 
         // checks if it's already logged in
         $user = $storage->attemptLoad($this->erdikoUser);
-        if($user instanceof iErdikoUser) {
+        if($user instanceof UserStorageInterface) {
             $this->logout();
         }
 
         $auth = $this->container["AUTHENTICATIONS"][$type];
         $result = $auth->login($credentials);
+        if(isset($result->user))
+            $user = $result->user;
+        else
+            throw new \Exception("User failed to load");
 
-        if(!isset($result->user) || !$result->user) {
-            throw new \Exception("user failed to load");
+        if(!empty($user) && (false !== $user)) {
+            $this->persistUser( $user );
+            $response = true;
         }
-        $this->persistUser($result->user);
 
         return $result;
     }
@@ -125,13 +105,21 @@ class JWTAuthenticator implements AuthenticatorInterface
      */
     public function verify($credentials, $type = 'jwt_auth')
     {
-		$result = false;
-		try {
-			$auth = $this->container["AUTHENTICATIONS"][$type];
+        $result = false;
+        try {
+            $auth = $this->container["AUTHENTICATIONS"][$type];
             $result = $auth->verify($credentials);
-		} catch (\Exception $e) {
-			\error_log($e->getMessage());
-		}
-		return $result;
+        } catch (\Exception $e) {
+            \error_log($e->getMessage());
+        }
+        return $result;
+    }
+
+    public function generateTokenStorage(UserStorageInterface $user)
+    {
+        $entityUser = $user->getEntity();
+
+        $userToken = new UsernamePasswordToken($entityUser->getEmail(),$entityUser->getPassword(),'main',$user->getRoles());
+        $_SESSION['tokenstorage'] = $userToken;
     }
 }
