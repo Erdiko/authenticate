@@ -57,16 +57,21 @@ class JWTAuthenticator implements AuthenticatorInterface
     }
 
     /**
-     * current_user
+     * Get current user
+     * @todo needs to be refactored
+     * @note we shouldn't have to make another db call here?
+     * @todo rename to getUser
      */
     public function currentUser()
     {
         try {
             if (!array_key_exists('tokenstorage',$_SESSION)) {
-                throw new \Exception('TokenStorage not found.');
+                throw new \Exception('Token storage not found.');
             }
-            $storeStorage = $_SESSION['tokenstorage'];
-            $users = $this->erdikoUser->getByParams(['email' => $storeStorage->getUsername()]);
+            $storage = $_SESSION['tokenstorage'];
+            $username = $storage->getToken()->getUsername();
+            // echo print_r($storage->getToken()->getId(), true);
+            $users = $this->erdikoUser->getByParams(['email' => $username]);
             if (!count($users)) {
                 throw new \Exception('User not found.');
             }
