@@ -60,7 +60,6 @@ class JWTAuthenticator implements AuthenticatorInterface
      * Get current user
      * @todo needs to be refactored
      * @note we shouldn't have to make another db call here?
-     * @todo rename to getUser
      */
     public function currentUser()
     {
