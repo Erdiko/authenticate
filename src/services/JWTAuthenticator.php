@@ -72,7 +72,7 @@ class JWTAuthenticator implements AuthenticatorInterface
             }
             $user = $users[0];
         } catch (\Exception $e) {
-            $user = $this->erdikoUser->getAnonymous();
+            $user = $this->erdikoUser->getGeneral();
         }
         return $user;
     }

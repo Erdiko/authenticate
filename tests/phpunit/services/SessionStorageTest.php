@@ -41,11 +41,11 @@ class SessionStorageTest extends ErdikoTestCase
 
 	public function testSessionPersistAnnonymous()
 	{
-		$this->session->persist(MockErdikoUser::getAnonymous());
+		$this->session->persist(MockErdikoUser::getGeneral());
 		$current_user = MockErdikoUser::unmarshall($_SESSION["current_user"]);
 
 		$this->assertNotEmpty($current_user);
-		$this->assertEquals('anonymous', $current_user->getRole());
+		$this->assertEquals('general', $current_user->getRole());
 	}
 
 	public function testSessionPersist()
@@ -87,7 +87,7 @@ class SessionStorageTest extends ErdikoTestCase
 
 	public function testDestroy()
 	{
-		$this->session->persist(MockErdikoUser::getAnonymous());
+		$this->session->persist(MockErdikoUser::getGeneral());
 		$this->session->destroy();
 		$this->assertFalse(isset($_SESSION["current_user"]));
 	}

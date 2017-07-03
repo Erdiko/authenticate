@@ -21,7 +21,7 @@ class MockErdikoUser implements
 	protected $_user;
 
 	public function __construct() {
-		$this->_user = self::createAnonymous();
+		$this->_user = self::createGeneral();
 	}
 
 	public function setEntity($entity)
@@ -40,18 +40,18 @@ class MockErdikoUser implements
 		return self::unmarshall($this->marshall());
 	}
 	
-	public static function getAnonymous() {
+	public static function getGeneral() {
 		$_user = new MockErdikoUser();
 		return $_user;
 	}
 
-	protected static function createAnonymous()
+	protected static function createGeneral()
 	{
 		$_entity = new UserEntity();
 		$_entity->setId(0);
-		$_entity->setName('anonymous');
-		$_entity->setEmail('anonymous@mail.com');
-		$_entity->setRole('anonymous');
+		$_entity->setName('general');
+		$_entity->setEmail('general@mail.com');
+		$_entity->setRole('general');
 		return $_entity;
 	}
 
@@ -84,12 +84,12 @@ class MockErdikoUser implements
 		return $this->hasRole('admin');
 	}
 
-	public function isAnonymous()
+	public function isGeneral()
 	{
 		return $this->hasRole();
 	}
 
-	public function hasRole($role = "anonymous")
+	public function hasRole($role = "general")
 	{
 		return $this->_user->getRole() == $role;
 	}
