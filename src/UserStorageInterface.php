@@ -13,7 +13,7 @@ namespace erdiko\authenticate;
 
 interface UserStorageInterface 
 {
-	public static function getAnonymous();
+	public static function getGeneral();
 	public function marshall();
 	public static function unmarshall($encoded);
 }

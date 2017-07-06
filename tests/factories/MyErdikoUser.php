@@ -14,9 +14,9 @@ use erdiko\authenticate\UserStorageInterface;
 class MyErdikoUser implements UserStorageInterface
 {
 	private $user_id;
-	private $roles = array('anonymous');
-	private $username = "anonymous";
-	private $display_name = "Anonymous";
+	private $roles = array('general');
+	private $username = "general";
+	private $display_name = "General";
 	private $profile;
 
 
@@ -59,7 +59,7 @@ class MyErdikoUser implements UserStorageInterface
 		// TODO: Implement unmarshall() method.
 		$decode = json_decode( $encoded, true );
 		if(empty($decode)){
-			$entity = self::getAnonymous();
+			$entity = self::getGeneral();
 		} else {
 			$entity = new MyErdikoUser();
 			foreach ($decode as $key=>$value) {
@@ -89,11 +89,11 @@ class MyErdikoUser implements UserStorageInterface
 		return self::unmarshall($this->marshall());
 	}
 
-	public static function getAnonymous()
+	public static function getGeneral()
 	{
 		$_user = new MyErdikoUser();
 		$_user->setUserId(0);
-		$_user->setRoles(array('anonymous'),true);
+		$_user->setRoles(array('general'),true);
 		$_user->setEmail('anonymouys@mail.com');
 		return $_user;
 	}
@@ -115,9 +115,9 @@ class MyErdikoUser implements UserStorageInterface
 			: in_array(strtolower($role),$this->roles);
 	}
 
-	public function isAnonymous()
+	public function isGeneral()
 	{
-		return ($this->username == "anonymous");
+		return ($this->username == "general");
     }
 
 	/**

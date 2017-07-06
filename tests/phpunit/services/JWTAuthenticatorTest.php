@@ -36,7 +36,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testConstructor()
     {
-		$jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
+		$jwtAuth = new JWTAuthenticator(MockErdikoUser::getGeneral());
 		$this->assertInstanceOf(JWTAuthenticator::class, $jwtAuth);
     }
 
@@ -46,7 +46,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testLoginNoUser()
     {
-        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
+        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getGeneral());
 
         $authParams = array(
             'username'      =>  "fake@mail.com",
@@ -63,7 +63,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testLogin()
     {
-        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
+        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getGeneral());
 
         $authParams = array(
             'secret_key'    =>  "abc123",
@@ -89,7 +89,7 @@ class JWTAuthenticatorTest extends ErdikoTestCase
      */
     public function testVerify()
     {
-        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getAnonymous());
+        $jwtAuth = new JWTAuthenticator(MockErdikoUser::getGeneral());
  
         $authParams = array(
             'secret_key'    =>  "abc123",

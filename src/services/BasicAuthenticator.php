@@ -58,10 +58,10 @@ class BasicAuthenticator implements AuthenticatorInterface
 		try {
 			$store = $this->container["STORAGES"][$this->selectedStorage];
 			$user  = $store->attemptLoad($this->erdikoUser);
-			if(empty($user)) $user = $this->erdikoUser->getAnonymous();
+			if(empty($user)) $user = $this->erdikoUser->getGeneral();
 
 		} catch (\Exception $e) {
-			$user = $this->erdikoUser->getAnonymous();
+			$user = $this->erdikoUser->getGeneral();
 		}
 		return $user;
 	}
