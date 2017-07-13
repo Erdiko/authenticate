@@ -140,12 +140,12 @@ class JWTAuthenticator implements AuthenticatorInterface
     public function generateTokenStorage(UserStorageInterface $user)
     {
         $entityUser = $user->getEntity();
-
         $userToken = new UsernamePasswordToken($entityUser->getEmail(),$entityUser->getPassword(),'main',$user->getRoles());
-	    $tokenStorage = new TokenStorage();
 
-	    $tokenStorage->setToken($userToken);
-	    $_SESSION['tokenstorage'] = $tokenStorage;
+        $tokenStorage = new TokenStorage();
+        $tokenStorage->setToken($userToken);
+        $_SESSION['tokenstorage'] = $tokenStorage;
     }
+
 
 }
