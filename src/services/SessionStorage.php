@@ -55,16 +55,6 @@ Class SessionStorage implements StorageInterface {
 
 	private function startSession()
 	{
-	    /**
-         * @TODO Create a Session Class Handler into Core
-         * with a json config to have flexibility and share to all modules
-         * init/get/remove/etc
-         */
-//		if(!file_exists(ERDIKO_VAR . "/session")) {
-//			mkdir(ERDIKO_VAR . "/session");
-//		}
-//		ini_set('session.save_path',ERDIKO_VAR . "/session");
-
 		if(session_id() == '') {
 			@session_start();
 		} else {
