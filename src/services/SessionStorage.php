@@ -55,10 +55,6 @@ Class SessionStorage implements StorageInterface {
 
 	private function startSession()
 	{
-		if(!file_exists(ERDIKO_VAR . "/session")) {
-			mkdir(ERDIKO_VAR . "/session");
-		}
-		ini_set('session.save_path',ERDIKO_VAR . "/session");
 		if(session_id() == '') {
 			@session_start();
 		} else {
